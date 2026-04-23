@@ -11,14 +11,14 @@
 }
 
 body {
-  background: linear-gradient(180deg, #FFF8E1 0%, #FFECB3 40%, #FFE082 100%);
+  background: linear-gradient(180deg, #FFFDF0 0%, #FFF8CC 40%, #FFF5A5 100%);
   min-height: 100vh;
   overflow: hidden;
   font-family: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   position: relative;
 }
 
-/* ====== 顶部标题栏 ====== */
+/*====== 顶部标题栏 ====== */
 .header {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -28,9 +28,9 @@ body {
   justify-content: center;
   gap: 10px;
   padding: 12px 20px;
-  background: linear-gradient(90deg, #FFF4C8 0%, #FFE68A 45%, #FFDD6B 100%);
-  border-bottom: 2.5px dashed #FFC107;
-  box-shadow: 0 3px 12px rgba(255, 213, 79, 0.2);
+  background: linear-gradient(90deg, #FFFADC 0%, #FFF5A5 45%, #FFED6B 100%);
+  border-bottom: 2.5px dashed #FFD54F;
+  box-shadow: 0 3px 12px rgba(255, 237, 107, 0.25);
 }
 
 .header-icon {
@@ -38,7 +38,7 @@ body {
   background: url('https://i.postimg.cc/44Lbdy7K/1773404738205.png') center/contain no-repeat;
   image-rendering: pixelated;
   animation: wiggle 2.8s ease-in-out infinite;
-  filter: drop-shadow(0 2px 4px rgba(255,193,7,.35));
+  filter: drop-shadow(0 2px 4px rgba(255,213,79,.35));
 }
 
 @keyframes wiggle {
@@ -52,7 +52,7 @@ body {
 }
 
 .header-title {
-  color: #CF5617;
+  color: #D05D1A;
   font-weight: 700;
   font-size: 1.1em;
   text-shadow: 0 1px 2px rgba(255,255,255,0.6);
@@ -64,7 +64,7 @@ body {
   background: url('https://i.postimg.cc/t482CD77/1773325087190.png') center/contain no-repeat;
   image-rendering: pixelated;
   animation: toastBounce 3.2s ease-in-out infinite;
-  filter: drop-shadow(0 2px 4px rgba(255,193,7,.35));
+  filter: drop-shadow(0 2px 4px rgba(255,213,79,.35));
 }
 
 @keyframes toastBounce {
@@ -85,7 +85,7 @@ body {
   pointer-events: none;
 }
 
-/* ====== 单条弹幕 ====== */
+/*====== 单条弹幕 ====== */
 .danmaku-item {
   position: absolute;
   white-space: nowrap;
@@ -93,10 +93,10 @@ body {
   cursor: pointer;
   padding: 6px 16px;
   border-radius: 20px;
-  background: rgba(255, 250, 235, 0.85);
-  border: 1.5px solid rgba(255, 193, 7, 0.4);
-  box-shadow: 0 2px 8px rgba(255, 213, 79, 0.2);
-  color: #A8420F;
+  background: rgba(255, 253, 240, 0.88);
+  border: 1.5px solid rgba(255, 213, 79, 0.45);
+  box-shadow: 0 2px 8px rgba(255, 237, 107, 0.25);
+  color: #D05D1A;
   font-weight: 700;
   font-size: 1.2em;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
@@ -108,26 +108,26 @@ body {
 
 .danmaku-item:hover {
   transform: scale(1.12) !important;
-  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.4);
-  background: rgba(255, 245, 200, 0.95);
+  box-shadow: 0 4px 16px rgba(255, 237, 107, 0.45);
+  background: rgba(255, 250, 220, 0.95);
   z-index: 50;
 }
 
 .danmaku-item .danmaku-author {
   font-size: 0.6em;
-  color: #CF5617;
-  opacity: 0.6;
+  color: #D05D1A;
+  opacity: 0.55;
   margin-left: 6px;
   font-weight: 400;
 }
 
-/* 复制反馈 */
+/*复制反馈 */
 .copy-toast {
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%) scale(0.8);
-  background: rgba(168, 66, 15, 0.9);
-  color: #FFF8E1;
+  background: rgba(208, 93, 26, 0.92);
+  color: #FFFDF0;
   padding: 12px 28px;
   border-radius: 12px;
   font-weight: 700;
@@ -136,7 +136,7 @@ body {
   opacity: 0;
   z-index: 999;
   transition: opacity 0.2s, transform 0.2s;
-  box-shadow: 0 4px 20px rgba(168, 66, 15, 0.3);
+  box-shadow: 0 4px 20px rgba(208, 93, 26, 0.3);
 }
 
 .copy-toast.show {
@@ -153,13 +153,13 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  background: linear-gradient(90deg, #FFF4C8 0%, #FFE68A 45%, #FFDD6B 100%);
-  border-top: 2.5px dashed #FFC107;
-  box-shadow: 0 -3px 12px rgba(255, 213, 79, 0.15);
+  background: linear-gradient(90deg, #FFFADC 0%, #FFF5A5 45%, #FFED6B 100%);
+  border-top: 2.5px dashed #FFD54F;
+  box-shadow: 0 -3px 12px rgba(255, 237, 107, 0.2);
 }
 
 .footer-count {
-  color: #CF5617;
+  color: #D05D1A;
   font-size: 0.85em;
   font-weight: 700;
   text-shadow: 0 1px 2px rgba(255,255,255,0.6);
@@ -170,22 +170,22 @@ body {
   align-items: center;
   gap: 6px;
   padding: 8px 20px;
-  background: linear-gradient(135deg, #FFB300 0%, #FF8F00 100%);
+  background: linear-gradient(135deg, #F5A623 0%, #E8871E 100%);
   color: #fff;
   font-weight: 700;
   font-size: 0.9em;
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  box-shadow: 0 3px 12px rgba(255, 143, 0, 0.35);
+  box-shadow: 0 3px 12px rgba(245, 166, 35, 0.4);
   transition: all 0.2s ease;
   text-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
 
 .btn-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 143, 0, 0.45);
-  background: linear-gradient(135deg, #FFC107 0%, #FF8F00 100%);
+  box-shadow: 0 6px 20px rgba(245, 166, 35, 0.5);
+  background: linear-gradient(135deg, #FBBD40 0%, #F5A623 100%);
 }
 
 .btn-submit:active {
@@ -202,13 +202,12 @@ body {
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(168, 66, 15, 0.2);
+  background: rgba(208, 93, 26, 0.15);
   backdrop-filter: blur(4px);
   z-index: 200;
   display: flex;
   align-items: center;
-  justify-content: center;
-  opacity: 0;
+  justify-content: center;opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
@@ -219,13 +218,13 @@ body {
 }
 
 .modal {
-  background: #FFFEF5;
+  background: #FFFDF0;
   border: 2px solid #FFD54F;
   border-radius: 20px;
   padding: 28px 24px;
   width: 90%;
   max-width: 380px;
-  box-shadow: 0 12px 40px rgba(255, 213, 79, 0.3), inset 0 1px 0 rgba(255, 245, 200, 0.7);
+  box-shadow: 0 12px 40px rgba(255, 237, 107, 0.3), inset 0 1px 0 rgba(255, 253, 240, 0.7);
   transform: translateY(20px) scale(0.95);
   transition: transform 0.3s cubic-bezier(.34, 1.3, .64, 1);
 }
@@ -238,7 +237,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #CF5617;
+  color: #D05D1A;
   font-weight: 700;
   font-size: 1.05em;
   margin-bottom: 18px;
@@ -254,7 +253,7 @@ body {
 
 .modal label {
   display: block;
-  color: #A8420F;
+  color: #D05D1A;
   font-weight: 700;
   font-size: 0.85em;
   margin-bottom: 6px;
@@ -268,10 +267,10 @@ body {
 .modal input[type="text"] {
   width: 100%;
   padding: 10px 14px;
-  border: 1.5px solid rgba(255, 193, 7, 0.5);
+  border: 1.5px solid rgba(255, 213, 79, 0.55);
   border-radius: 12px;
-  background: linear-gradient(180deg, #FFFEF5 0%, #FFF8E1 100%);
-  color: #A8420F;
+  background: linear-gradient(180deg, #FFFDF0 0%, #FFF8CC 100%);
+  color: #D05D1A;
   font-size: 1em;
   font-weight: 700;
   font-family: inherit;
@@ -280,20 +279,20 @@ body {
 }
 
 .modal input[type="text"]:focus {
-  border-color: #FFB300;
-  box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.15);
+  border-color: #F5A623;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
 }
 
 .modal input[type="text"]::placeholder {
-  color: #CF5617;
-  opacity: 0.35;
+  color: #D05D1A;
+  opacity: 0.3;
   font-weight: 400;
 }
 
 .modal-hint {
   font-size: 0.75em;
-  color: #CF5617;
-  opacity: 0.5;
+  color: #D05D1A;
+  opacity: 0.45;
   margin-top: 4px;
 }
 
@@ -307,9 +306,9 @@ body {
   flex: 1;
   padding: 10px;
   background: transparent;
-  border: 1.5px solid rgba(207, 86, 23, 0.25);
+  border: 1.5px solid rgba(208, 93, 26, 0.2);
   border-radius: 12px;
-  color: #CF5617;
+  color: #D05D1A;
   font-weight: 700;
   font-size: 0.9em;
   cursor: pointer;
@@ -318,14 +317,14 @@ body {
 }
 
 .btn-cancel:hover {
-  background: rgba(255, 245, 200, 0.5);
-  border-color: rgba(207, 86, 23, 0.4);
+  background: rgba(255, 250, 220, 0.5);
+  border-color: rgba(208, 93, 26, 0.35);
 }
 
 .btn-confirm {
   flex: 1.5;
   padding: 10px;
-  background: linear-gradient(135deg, #FFB300 0%, #FF8F00 100%);
+  background: linear-gradient(135deg, #F5A623 0%, #E8871E 100%);
   border: none;
   border-radius: 12px;
   color: #fff;
@@ -333,14 +332,14 @@ body {
   font-size: 0.9em;
   cursor: pointer;
   font-family: inherit;
-  box-shadow: 0 3px 12px rgba(255, 143, 0, 0.3);
+  box-shadow: 0 3px 12px rgba(245, 166, 35, 0.35);
   transition: all 0.2s;
   text-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
 
 .btn-confirm:hover {
   transform: translateY(-1px);
-  box-shadow: 0 5px 18px rgba(255, 143, 0, 0.4);
+  box-shadow: 0 5px 18px rgba(245, 166, 35, 0.45);
 }
 
 .btn-confirm:active {
@@ -359,61 +358,44 @@ body {
   100% { transform: translateX(calc(-100vw - 100%)); }
 }
 
-/* ====== 暂停按钮 ====== */
-.btn-pause {
+/* ====== 工具按钮通用 ====== */
+.tool-btn {
   position: fixed;
+  z-index: 99;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 213, 79, 0.55);
+  background: rgba(255, 253, 240, 0.92);
+  color: #D05D1A;
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(255, 237, 107, 0.3);
+  transition: all 0.2s;
+}
+
+.tool-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 14px rgba(255, 237, 107, 0.4);
+}
+
+.btn-pause {
   bottom: 76px;
   right: 16px;
-  z-index: 99;
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 193, 7, 0.5);
-  background: rgba(255, 250, 235, 0.9);
-  color: #A8420F;
-  font-size: 1em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(255, 213, 79, 0.25);
-  transition: all 0.2s;
 }
 
-.btn-pause:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 14px rgba(255, 213, 79, 0.35);
-}
-
-/* ====== 列表视图按钮 ====== */
 .btn-list-view {
-  position: fixed;
   bottom: 76px;
   right: 64px;
-  z-index: 99;
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 193, 7, 0.5);
-  background: rgba(255, 250, 235, 0.9);
-  color: #A8420F;
-  font-size: 1em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(255, 213, 79, 0.25);
-  transition: all 0.2s;
 }
 
-.btn-list-view:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 14px rgba(255, 213, 79, 0.35);
-}
-
-/* ====== 列表视图遮罩 ====== */
+/* ====== 列表视图 ====== */
 .list-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(168, 66, 15, 0.15);
+  background: rgba(208, 93, 26, 0.1);
   backdrop-filter: blur(4px);
   z-index: 150;
   opacity: 0;
@@ -429,11 +411,11 @@ body {
 .list-panel {
   position: fixed;
   top: 0; right: 0; bottom: 0;
-  width: 340px;
+  width: 360px;
   max-width: 90vw;
-  background: linear-gradient(180deg, #FFFEF5 0%, #FFF8E1 60%, #FFF3CC 100%);
+  background: linear-gradient(180deg, #FFFDF0 0%, #FFF8CC 60%, #FFF5A5 100%);
   border-left: 2px solid #FFD54F;
-  box-shadow: -4px 0 20px rgba(255, 213, 79, 0.2);
+  box-shadow: -4px 0 20px rgba(255, 237, 107, 0.25);
   z-index: 151;
   display: flex;
   flex-direction: column;
@@ -450,12 +432,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(90deg, #FFF4C8 0%, #FFE68A 45%, #FFDD6B 100%);
-  border-bottom: 2.5px dashed #FFC107;
+  background: linear-gradient(90deg, #FFFADC 0%, #FFF5A5 45%, #FFED6B 100%);
+  border-bottom: 2.5px dashed #FFD54F;
 }
 
 .list-panel-title {
-  color: #CF5617;
+  color: #D05D1A;
   font-weight: 700;
   font-size: 0.95em;
 }
@@ -463,9 +445,9 @@ body {
 .btn-close-list {
   width: 30px; height: 30px;
   border-radius: 50%;
-  border: 1.5px solid rgba(207, 86, 23, 0.25);
+  border: 1.5px solid rgba(208, 93, 26, 0.2);
   background: transparent;
-  color: #CF5617;
+  color: #D05D1A;
   font-size: 1em;
   cursor: pointer;
   display: flex;
@@ -475,7 +457,7 @@ body {
 }
 
 .btn-close-list:hover {
-  background: rgba(255, 245, 200, 0.5);
+  background: rgba(255, 250, 220, 0.5);
 }
 
 .list-panel-content {
@@ -486,11 +468,11 @@ body {
 
 .list-panel-content::-webkit-scrollbar { width: 6px; }
 .list-panel-content::-webkit-scrollbar-track {
-  background: linear-gradient(180deg, rgba(255,245,200,.2), rgba(255,224,130,.15));
+  background: linear-gradient(180deg, rgba(255,250,220,.2), rgba(255,245,165,.15));
   border-radius: 3px;
 }
 .list-panel-content::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #FFE68A 0%, #FFD54F 50%, #FFC107 100%);
+  background: linear-gradient(180deg, #FFED6B 0%, #FFD54F 50%, #FFC107 100%);
   border-radius: 3px;
 }
 
@@ -501,35 +483,211 @@ body {
   padding: 10px 12px;
   border-radius: 12px;
   margin-bottom: 6px;
-  background: rgba(255, 250, 235, 0.6);
-  border: 1px solid rgba(255, 193, 7, 0.2);
-  cursor: pointer;
+  background: rgba(255, 253, 240, 0.65);
+  border: 1px solid rgba(255, 213, 79, 0.25);
   transition: all 0.15s;
 }
 
 .list-item:hover {
-  background: rgba(255, 245, 200, 0.9);
-  border-color: rgba(255, 193, 7, 0.45);
-  transform: translateX(-2px);
+  background: rgba(255, 250, 220, 0.9);
+  border-color: rgba(255, 213, 79, 0.5);
+}
+
+.list-item-left {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
 }
 
 .list-item-content {
-  color: #A8420F;
+  color: #D05D1A;
   font-weight: 700;
   font-size: 1em;
 }
 
 .list-item-author {
-  color: #CF5617;
-  opacity: 0.5;
+  color: #D05D1A;
+  opacity: 0.45;
   font-size: 0.7em;
-  font-weight: 400;
+  font-weight: 400;margin-top: 2px;
+}
+
+.list-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-left: 8px;
 }
 
 .list-item-copy {
-  font-size: 0.7em;
-  color: #CF5617;
-  opacity: 0.4;
+  font-size: 0.65em;
+  color: #D05D1A;
+  opacity: 0.35;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.list-item-copy:hover {
+  opacity: 0.7;
+  background: rgba(255, 245, 165, 0.5);
+}
+
+.list-item-delete {
+  font-size: 0.65em;
+  color: #D05D1A;
+  opacity: 0.25;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.list-item-delete:hover {
+  opacity: 0.7;
+  background: rgba(232, 135, 30, 0.1);
+  color: #c0392b;
+}
+
+/* ====== 删除确认弹窗 ====== */
+.delete-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(208, 93, 26, 0.2);
+  backdrop-filter: blur(4px);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.delete-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.delete-modal {
+  background: #FFFDF0;
+  border: 2px solid #FFD54F;
+  border-radius: 20px;
+  padding: 24px 22px;
+  width: 85%;
+  max-width: 340px;
+  box-shadow: 0 12px 40px rgba(255, 237, 107, 0.3);
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.3s cubic-bezier(.34, 1.3, .64, 1);
+}
+
+.delete-overlay.active .delete-modal {
+  transform: translateY(0) scale(1);
+}
+
+.delete-modal-title {
+  color: #D05D1A;
+  font-weight: 700;
+  font-size: 0.95em;
+  margin-bottom: 6px;
+}
+
+.delete-modal-preview {
+  color: #D05D1A;
+  font-size: 1.3em;
+  font-weight: 700;
+  text-align: center;
+  padding: 10px;
+  margin: 10px 0;
+  background: rgba(255, 245, 165, 0.3);
+  border-radius: 10px;
+}
+
+.delete-modal label {
+  display: block;
+  color: #D05D1A;
+  font-weight: 700;
+  font-size: 0.8em;
+  margin-bottom: 6px;
+  margin-top: 12px;
+}
+
+.delete-modal input[type="password"] {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid rgba(255, 213, 79, 0.55);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #FFFDF0 0%, #FFF8CC 100%);
+  color: #D05D1A;
+  font-size: 0.9em;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.delete-modal input[type="password"]:focus {
+  border-color: #F5A623;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
+}
+
+.delete-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.btn-delete-cancel {
+  flex: 1;
+  padding: 9px;
+  background: transparent;
+  border: 1.5px solid rgba(208, 93, 26, 0.2);
+  border-radius: 10px;
+  color: #D05D1A;
+  font-weight: 700;
+  font-size: 0.85em;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.btn-delete-cancel:hover {
+  background: rgba(255, 250, 220, 0.5);
+}
+
+.btn-delete-confirm {
+  flex: 1;
+  padding: 9px;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85em;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+  transition: all 0.2s;
+}
+
+.btn-delete-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(231, 76, 60, 0.4);
+}
+
+.btn-delete-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.delete-error {
+  color: #c0392b;
+  font-size: 0.75em;
+  font-weight: 700;
+  margin-top: 6px;
+  min-height: 1em;
 }
 
 /* ====== 响应式 ====== */
@@ -550,30 +708,27 @@ body {
 </head>
 <body>
 
-<!-- 顶部 -->
+<!--顶部 -->
 <div class="header">
   <div class="header-icon"></div>
   <div class="header-title">✦ 颜文字收集墙 ✦</div>
   <div class="header-toast"></div>
 </div>
 
-<!-- 弹幕区 -->
+<!--弹幕区 -->
 <div class="danmaku-stage" id="stage"></div>
 
 <!-- 复制反馈 -->
 <div class="copy-toast" id="copyToast">已复制！ (ᐢ..ᐢ)✧</div>
 
-<!-- 暂停按钮 -->
-<button class="btn-pause" id="btnPause" title="暂停/继续">⏸</button>
-
-<!-- 列表视图按钮 -->
-<button class="btn-list-view" id="btnListView" title="列表查看">☰</button>
+<!-- 工具按钮 -->
+<button class="tool-btn btn-pause" id="btnPause" title="暂停/继续">⏸</button>
+<button class="tool-btn btn-list-view" id="btnListView" title="列表查看">☰</button>
 
 <!-- 底部 -->
 <div class="footer">
   <div class="footer-count" id="footerCount">收集中...</div>
-  <button class="btn-submit" id="btnSubmit">
-    <span class="btn-submit-icon"></span>
+  <button class="btn-submit" id="btnSubmit"><span class="btn-submit-icon"></span>
     投个颜文字！
   </button>
 </div>
@@ -608,6 +763,21 @@ body {
   </div>
 </div>
 
+<!-- 删除确认弹窗 -->
+<div class="delete-overlay" id="deleteOverlay">
+  <div class="delete-modal">
+    <div class="delete-modal-title">确定要删除这个颜文字吗？</div>
+    <div class="delete-modal-preview" id="deletePreview"></div>
+    <label for="deletePassword">管理密码</label>
+    <input type="password" id="deletePassword" placeholder="输入管理密码" autocomplete="off">
+    <div class="delete-error" id="deleteError"></div>
+    <div class="delete-modal-actions">
+      <button class="btn-delete-cancel" id="btnDeleteCancel">算了</button>
+      <button class="btn-delete-confirm" id="btnDeleteConfirm">删除</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function() {
   const stage = document.getElementById('stage');
@@ -624,19 +794,25 @@ body {
   const listOverlay = document.getElementById('listOverlay');
   const listContent = document.getElementById('listContent');
   const btnCloseList = document.getElementById('btnCloseList');
+  const deleteOverlay = document.getElementById('deleteOverlay');
+  const deletePreview = document.getElementById('deletePreview');
+  const deletePassword = document.getElementById('deletePassword');
+  const deleteError = document.getElementById('deleteError');
+  const btnDeleteCancel = document.getElementById('btnDeleteCancel');
+  const btnDeleteConfirm = document.getElementById('btnDeleteConfirm');
 
   let allKaomoji = [];
   let isPaused = false;
   let danmakuPool = [];
   let spawnTimer = null;
-  let spawnIndex = 0;
+  let deleteTargetId = null;
 
   // 加载数据
   async function loadData() {
     try {
       const res = await fetch('/api/kaomoji');
       allKaomoji = await res.json();
-      footerCount.textContent = `已收集 ${allKaomoji.length} 个颜文字 ✦`;
+      footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
       startDanmaku();
     } catch (e) {
       footerCount.textContent = '加载失败了… (╥﹏╥)';
@@ -647,8 +823,12 @@ body {
   function spawnDanmaku(item) {
     const el = document.createElement('div');
     el.className = 'danmaku-item';
-    el.innerHTML = item.content + (item.author ? `<span class="danmaku-author">— ${item.author}</span>` : '');
-    el.dataset.content = item.content;
+
+    let html = escapeHtml(item.content);
+    if (item.author) {
+      html += '<span class="danmaku-author">— ' + escapeHtml(item.author) + '</span>';
+    }
+    el.innerHTML = html;
 
     const stageH = stage.offsetHeight;
     const itemH = 42;
@@ -659,16 +839,18 @@ body {
     el.style.top = top + 'px';
     el.style.right = '-400px';
 
-    // 随机速度：15s ~ 28s
-    const duration = 15 + Math.random() * 13;
-    // 随机大小变化
+    // 速度加快：8~18秒
+    const duration = 8 + Math.random() * 10;
     const scale = 0.9 + Math.random() * 0.35;
     el.style.fontSize = scale + 'em';
     el.style.animationName = 'danmakuFloat';
     el.style.animationDuration = duration + 's';
 
-    // 点击复制
-    el.addEventListener('click', (e) => {
+    if (isPaused) {
+      el.style.animationPlayState = 'paused';
+    }
+
+    el.addEventListener('click', function(e) {
       e.stopPropagation();
       copyToClipboard(item.content);
     });
@@ -676,8 +858,7 @@ body {
     stage.appendChild(el);
     danmakuPool.push(el);
 
-    // 动画结束后移除
-    el.addEventListener('animationend', () => {
+    el.addEventListener('animationend', function() {
       el.remove();
       const idx = danmakuPool.indexOf(el);
       if (idx > -1) danmakuPool.splice(idx, 1);
@@ -688,117 +869,110 @@ body {
     if (spawnTimer) clearInterval(spawnTimer);
     if (allKaomoji.length === 0) return;
 
-    // 先洗牌一份
-    const shuffled = [...allKaomoji].sort(() => Math.random() - 0.5);
-    spawnIndex = 0;
-
-    // 初始先撒一波
-    const initial = Math.min(shuffled.length, 8);
-    for (let i = 0; i < initial; i++) {
-      setTimeout(() => {
-        if (!isPaused) spawnDanmaku(shuffled[spawnIndex % shuffled.length]);
-        spawnIndex++;
-      }, i * 600);
+    var initial = Math.min(allKaomoji.length, 8);
+    for (var i = 0; i < initial; i++) {
+      (function(idx) {
+        setTimeout(function() {
+          if (!isPaused && allKaomoji.length > 0) {
+            spawnDanmaku(allKaomoji[idx % allKaomoji.length]);
+          }
+        }, idx * 500);
+      })(i);
     }
 
-    // 持续生成
-    spawnTimer = setInterval(() => {
-      if (isPaused) return;
-      // 重新洗牌以保持随机
-      const item = allKaomoji[Math.floor(Math.random() * allKaomoji.length)];
+    spawnTimer = setInterval(function() {
+      if (isPaused || allKaomoji.length === 0) return;
+      var item = allKaomoji[Math.floor(Math.random() * allKaomoji.length)];
       spawnDanmaku(item);
-    }, 2200 + Math.random() * 1200);
+    }, 1800+ Math.random() * 1000);
   }
 
-  // 复制到剪贴板
+  // 复制
   function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-      showCopyToast();
-    }).catch(() => {
-      // fallback
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.left = '-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      showCopyToast();
-    });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(showCopyToast).catch(function() {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
   }
 
-  let copyToastTimer = null;
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    showCopyToast();
+  }
+
+  var copyToastTimer = null;
   function showCopyToast() {
     copyToast.classList.add('show');
     if (copyToastTimer) clearTimeout(copyToastTimer);
-    copyToastTimer = setTimeout(() => {
+    copyToastTimer = setTimeout(function() {
       copyToast.classList.remove('show');
     }, 1200);
   }
 
-  // 暂停/继续
-  btnPause.addEventListener('click', () => {
+  // 暂停
+  btnPause.addEventListener('click', function() {
     isPaused = !isPaused;
     btnPause.textContent = isPaused ? '▶' : '⏸';
-    danmakuPool.forEach(el => {
+    danmakuPool.forEach(function(el) {
       el.style.animationPlayState = isPaused ? 'paused' : 'running';
     });
   });
 
   // 投稿弹窗
-  btnSubmit.addEventListener('click', () => {
+  btnSubmit.addEventListener('click', function() {
     modalOverlay.classList.add('active');
     inputKaomoji.value = '';
     inputAuthor.value = '';
-    setTimeout(() => inputKaomoji.focus(), 300);
+    setTimeout(function() { inputKaomoji.focus(); }, 300);
   });
 
-  btnCancel.addEventListener('click', () => {
+  btnCancel.addEventListener('click', function() {
     modalOverlay.classList.remove('active');
   });
 
-  modalOverlay.addEventListener('click', (e) => {
+  modalOverlay.addEventListener('click', function(e) {
     if (e.target === modalOverlay) modalOverlay.classList.remove('active');
   });
 
   btnConfirm.addEventListener('click', submitKaomoji);
 
-  // 回车提交
-  inputKaomoji.addEventListener('keydown', (e) => {
+  inputKaomoji.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') submitKaomoji();
   });
-  inputAuthor.addEventListener('keydown', (e) => {
+  inputAuthor.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') submitKaomoji();
   });
 
   async function submitKaomoji() {
-    const content = inputKaomoji.value.trim();
-    if (!content) {
-      inputKaomoji.focus();
-      return;
-    }
+    var content = inputKaomoji.value.trim();
+    if (!content) { inputKaomoji.focus(); return; }
     btnConfirm.disabled = true;
     btnConfirm.textContent = '发射中...';
     try {
-      const res = await fetch('/api/kaomoji', {
+      var res = await fetch('/api/kaomoji', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          content: content,
-          author: inputAuthor.value.trim()
-        })
+        body: JSON.stringify({ content: content, author: inputAuthor.value.trim() })
       });
       if (!res.ok) {
-        const err = await res.json();
+        var err = await res.json();
         alert(err.error || '发射失败了 (╥﹏╥)');
         return;
       }
-      const newItem = await res.json();
+      var newItem = await res.json();
       allKaomoji.unshift(newItem);
-      footerCount.textContent = `已收集 ${allKaomoji.length} 个颜文字 ✦`;
+      footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
       modalOverlay.classList.remove('active');
-      // 立刻让新的飘一条出来！
       spawnDanmaku(newItem);
     } catch (e) {
       alert('网络出错了 (╥﹏╥)');
@@ -809,40 +983,111 @@ body {
   }
 
   // 列表视图
-  btnListView.addEventListener('click', () => {
+  btnListView.addEventListener('click', function() {
     renderList();
     listOverlay.classList.add('active');
   });
 
-  btnCloseList.addEventListener('click', () => {
+  btnCloseList.addEventListener('click', function() {
     listOverlay.classList.remove('active');
   });
 
-  listOverlay.addEventListener('click', (e) => {
+  listOverlay.addEventListener('click', function(e) {
     if (e.target === listOverlay) listOverlay.classList.remove('active');
   });
 
   function renderList() {
     listContent.innerHTML = '';
-    allKaomoji.forEach(item => {
-      const el = document.createElement('div');
+    allKaomoji.forEach(function(item) {
+      var el = document.createElement('div');
       el.className = 'list-item';
-      el.innerHTML = `
-        <div>
-          <div class="list-item-content">${escapeHtml(item.content)}</div>
-          ${item.author ? `<div class="list-item-author">— ${escapeHtml(item.author)}</div>` : ''}
-        </div>
-        <div class="list-item-copy">点击复制</div>
-      `;
-      el.addEventListener('click', () => {
+      el.innerHTML =
+        '<div class="list-item-left">' +
+          '<div class="list-item-content">' + escapeHtml(item.content) + '</div>' +
+          (item.author ? '<div class="list-item-author">— ' + escapeHtml(item.author) + '</div>' : '') +
+        '</div>' +
+        '<div class="list-item-actions">' +
+          '<span class="list-item-copy" data-action="copy">复制</span>' +
+          '<span class="list-item-delete" data-action="delete">删除</span>' +
+        '</div>';
+
+      el.querySelector('.list-item-left').addEventListener('click', function() {
         copyToClipboard(item.content);
       });
+      el.querySelector('[data-action="copy"]').addEventListener('click', function(e) {
+        e.stopPropagation();
+        copyToClipboard(item.content);
+      });
+      el.querySelector('[data-action="delete"]').addEventListener('click', function(e) {
+        e.stopPropagation();
+        openDeleteModal(item);
+      });
+
       listContent.appendChild(el);
     });
   }
 
+  // 删除功能
+  function openDeleteModal(item) {
+    deleteTargetId = item.id;
+    deletePreview.textContent = item.content;
+    deletePassword.value = '';
+    deleteError.textContent = '';
+    deleteOverlay.classList.add('active');
+    setTimeout(function() { deletePassword.focus(); }, 300);
+  }
+
+  btnDeleteCancel.addEventListener('click', function() {
+    deleteOverlay.classList.remove('active');deleteTargetId = null;
+  });
+
+  deleteOverlay.addEventListener('click', function(e) {
+    if (e.target === deleteOverlay) {
+      deleteOverlay.classList.remove('active');
+      deleteTargetId = null;
+    }
+  });
+
+  deletePassword.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doDelete();
+  });
+
+  btnDeleteConfirm.addEventListener('click', doDelete);
+
+  async function doDelete() {
+    if (!deleteTargetId) return;
+    var pw = deletePassword.value;
+    if (!pw) { deleteError.textContent = '请输入管理密码～'; return; }
+    btnDeleteConfirm.disabled = true;
+    btnDeleteConfirm.textContent = '删除中...';
+    deleteError.textContent = '';
+    try {
+      var res = await fetch('/api/kaomoji/' + deleteTargetId, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+      if (!res.ok) {
+        var err = await res.json();
+        deleteError.textContent = err.error || '删除失败了';
+        return;
+      }
+      // 从本地数据移除
+      allKaomoji = allKaomoji.filter(function(k) { return k.id !== deleteTargetId; });
+      footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
+      deleteOverlay.classList.remove('active');
+      deleteTargetId = null;
+      renderList();
+    } catch (e) {
+      deleteError.textContent = '网络出错了…';
+    } finally {
+      btnDeleteConfirm.disabled = false;
+      btnDeleteConfirm.textContent = '删除';
+    }
+  }
+
   function escapeHtml(s) {
-    const d = document.createElement('div');
+    var d = document.createElement('div');
     d.textContent = s;
     return d.innerHTML;
   }
