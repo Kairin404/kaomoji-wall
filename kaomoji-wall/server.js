@@ -5,7 +5,9 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// 初始化数据库
+// ====== 管理密码（老大可以改这里！）======
+const ADMIN_PASSWORD = 'kairin';
+
 const db = new Database(path.join(__dirname, 'kaomoji.db'));
 db.pragma('journal_mode = WAL');
 
@@ -18,7 +20,6 @@ db.exec(`
   )
 `);
 
-// 如果表是空的，塞一些鼠鼠的颜文字进去当初始数据！
 const count = db.prepare('SELECT COUNT(*) as c FROM kaomoji').get().c;
 if (count === 0) {
   const seeds = [
@@ -30,7 +31,7 @@ if (count === 0) {
     ['ᕙ(`▿´)ᕗ', '鼠鼠'],
     ['(´ᗜ`)♪', '鼠鼠'],
     ['ᕙ(⇀‸↼‶)ᕗ', '鼠鼠'],
-    ['( ˘ω˘ )', '鼠鼠'],
+    ['(˘ω˘ )', '鼠鼠'],
     ['(╥﹏╥)', '鼠鼠'],
     ['(◕ᴗ◕✿)', ''],
     ['٩(◕‿◕｡)۶', ''],
@@ -55,7 +56,7 @@ if (count === 0) {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 获取所有颜文字
+//获取所有颜文字
 app.get('/api/kaomoji', (req, res) => {
   const rows = db.prepare('SELECT * FROM kaomoji ORDER BY created_at DESC').all();
   res.json(rows);
@@ -77,8 +78,24 @@ app.post('/api/kaomoji', (req, res) => {
   res.json(newRow);
 });
 
+// 删除颜文字（需要管理密码）
+app.delete('/api/kaomoji/:id', (req, res) => {
+  const { password } = req.body;
+  if (password !== ADMIN_PASSWORD) {
+    return res.status(403).json({ error: '密码不对哦～' });
+  }
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    return res.status(400).json({ error: '无效ID' });
+  }
+  const existing = db.prepare('SELECT * FROM kaomoji WHERE id = ?').get(id);
+  if (!existing) {
+    return res.status(404).json({ error: '找不到这个颜文字' });
+  }
+  db.prepare('DELETE FROM kaomoji WHERE id = ?').run(id);
+  res.json({ success: true });
+});
+
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`\n🐭 颜文字收集墙跑起来啦！`);
-  console.log(`📍 本地访问: http://localhost:${PORT}`);
-  console.log(`📍 外部访问: http://8.138.151.235:${PORT}\n`);
+  console.log('\nkaomoji wall running on port ' + PORT + '\n');
 });
