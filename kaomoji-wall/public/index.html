@@ -6,9 +6,7 @@
 <title>颜文字收集墙 ～ (｡･ω･｡)</title>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after {
-  margin: 0; padding: 0; box-sizing: border-box;
-}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   background: linear-gradient(180deg, #FFFDF0 0%, #FFF8CC 40%, #FFF5A5 100%);
@@ -18,21 +16,15 @@ body {
   position: relative;
 }
 
-/*====== 顶部标题栏 ====== */
+/* 顶部 */
 .header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
   padding: 12px 20px;
   background: linear-gradient(90deg, #FFFADC 0%, #FFF5A5 45%, #FFED6B 100%);
   border-bottom: 2.5px dashed #FFD54F;
   box-shadow: 0 3px 12px rgba(255, 237, 107, 0.25);
 }
-
 .header-icon {
   width: 32px; height: 32px;
   background: url('https://i.postimg.cc/44Lbdy7K/1773404738205.png') center/contain no-repeat;
@@ -40,7 +32,6 @@ body {
   animation: wiggle 2.8s ease-in-out infinite;
   filter: drop-shadow(0 2px 4px rgba(255,213,79,.35));
 }
-
 @keyframes wiggle {
   0%,100%{transform:translateX(0) translateY(0) rotate(0deg)}
   8%{transform:translateX(-2px) translateY(-1px) rotate(-6deg)}
@@ -50,15 +41,10 @@ body {
   50%{transform:translateX(0) translateY(-4px) rotate(2deg)}
   75%{transform:translateX(0) translateY(0) rotate(0deg)}
 }
-
 .header-title {
-  color: #D05D1A;
-  font-weight: 700;
-  font-size: 1.1em;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.6);
-  letter-spacing: 1px;
+  color: #D05D1A; font-weight: 700; font-size: 1.1em;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.6); letter-spacing: 1px;
 }
-
 .header-toast {
   width: 32px; height: 32px;
   background: url('https://i.postimg.cc/t482CD77/1773325087190.png') center/contain no-repeat;
@@ -66,7 +52,6 @@ body {
   animation: toastBounce 3.2s ease-in-out infinite;
   filter: drop-shadow(0 2px 4px rgba(255,213,79,.35));
 }
-
 @keyframes toastBounce {
   0%{transform:translateY(0) rotate(0deg) scale(1,1)}
   5%{transform:translateY(1px) rotate(0deg) scale(1.02,0.97)}
@@ -77,17 +62,16 @@ body {
   52%,100%{transform:translateY(0) rotate(0deg) scale(1,1)}
 }
 
-/* ====== 弹幕区域 ====== */
+/* 弹幕舞台 */
 .danmaku-stage {
-  position: fixed;
-  top: 60px; left: 0; right: 0; bottom: 80px;
-  overflow: hidden;
-  pointer-events: none;
+  position: fixed; top: 60px; left: 0; right: 0; bottom: 80px;
+  overflow: hidden; pointer-events: none;
 }
 
-/* ====== 单条弹幕 ====== */
+/* 🔥 关键修复：起点 left:100%，不再用 right */
 .danmaku-item {
   position: absolute;
+  left: 100%;
   white-space: nowrap;
   pointer-events: auto;
   cursor: pointer;
@@ -99,17 +83,23 @@ body {
   color: #D05D1A;
   font-weight: 700;
   font-size: 1.2em;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
   user-select: none;
   will-change: transform;
-  /* 不用CSS animation了，改用JS控制 */
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  touch-action: manipulation;
 }
-
-.danmaku-item:hover {
-  box-shadow: 0 4px 16px rgba(255, 237, 107, 0.45);
+.danmaku-item:hover, .danmaku-item.flash {
+  box-shadow: 0 4px 16px rgba(255, 237, 107, 0.5);
   background: rgba(255, 250, 220, 0.95);
   z-index: 50;
 }
-
+.danmaku-item.flash {
+  background: rgba(255, 230, 130, 1) !important;
+  border-color: #F5A623;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.3);
+}
 .danmaku-item .danmaku-author {
   font-size: 0.6em;
   color: #D05D1A;
@@ -118,10 +108,9 @@ body {
   font-weight: 400;
 }
 
-/*复制反馈 */
+/* 复制反馈 */
 .copy-toast {
-  position: fixed;
-  top: 50%; left: 50%;
+  position: fixed; top: 50%; left: 50%;
   transform: translate(-50%, -50%) scale(0.8);
   background: rgba(208, 93, 26, 0.92);
   color: #FFFDF0;
@@ -130,348 +119,232 @@ body {
   font-weight: 700;
   font-size: 1em;
   pointer-events: none;
-  opacity: 0;
-  z-index: 999;
+  opacity: 0; z-index: 999;
   transition: opacity 0.2s, transform 0.2s;
   box-shadow: 0 4px 20px rgba(208, 93, 26, 0.3);
 }
-
 .copy-toast.show {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* ====== 底部栏 ====== */
+/* 底部 */
 .footer {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 12px 20px;
   background: linear-gradient(90deg, #FFFADC 0%, #FFF5A5 45%, #FFED6B 100%);
   border-top: 2.5px dashed #FFD54F;
   box-shadow: 0 -3px 12px rgba(255, 237, 107, 0.2);
 }
-
 .footer-count {
-  color: #D05D1A;
-  font-size: 0.85em;
-  font-weight: 700;
+  color: #D05D1A; font-size: 0.85em; font-weight: 700;
   text-shadow: 0 1px 2px rgba(255,255,255,0.6);
 }
-
 .btn-submit {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  display: flex; align-items: center; gap: 6px;
   padding: 8px 20px;
   background: linear-gradient(135deg, #F5A623 0%, #E8871E 100%);
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.9em;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
+  color: #fff; font-weight: 700; font-size: 0.9em;
+  border: none; border-radius: 20px; cursor: pointer;
   box-shadow: 0 3px 12px rgba(245, 166, 35, 0.4);
   transition: all 0.2s ease;
   text-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
-
 .btn-submit:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(245, 166, 35, 0.5);
-  background: linear-gradient(135deg, #FBBD40 0%, #F5A623 100%);
 }
-
-.btn-submit:active {
-  transform: translateY(0);
-}
-
 .btn-submit-icon {
   width: 20px; height: 20px;
   background: url('https://i.postimg.cc/t482CD77/1773325087190.png') center/contain no-repeat;
   image-rendering: pixelated;
 }
 
-/* ====== 投稿弹窗 ====== */
+/* 投稿弹窗 */
 .modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(208, 93, 26, 0.15);
   backdrop-filter: blur(4px);
   z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
   transition: opacity 0.3s ease;
 }
-
-.modal-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
 .modal {
   background: #FFFDF0;
   border: 2px solid #FFD54F;
   border-radius: 20px;
   padding: 28px 24px;
-  width: 90%;
-  max-width: 380px;
-  box-shadow: 0 12px 40px rgba(255, 237, 107, 0.3), inset 0 1px 0 rgba(255, 253, 240, 0.7);
+  width: 90%; max-width: 380px;
+  box-shadow: 0 12px 40px rgba(255, 237, 107, 0.3);
   transform: translateY(20px) scale(0.95);
   transition: transform 0.3s cubic-bezier(.34, 1.3, .64, 1);
 }
-
-.modal-overlay.active .modal {
-  transform: translateY(0) scale(1);
-}
-
+.modal-overlay.active .modal { transform: translateY(0) scale(1); }
 .modal-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #D05D1A;
-  font-weight: 700;
-  font-size: 1.05em;
+  display: flex; align-items: center; gap: 8px;
+  color: #D05D1A; font-weight: 700; font-size: 1.05em;
   margin-bottom: 18px;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.6);
 }
-
 .modal-title-icon {
   width: 26px; height: 26px;
   background: url('https://i.postimg.cc/44Lbdy7K/1773404738205.png') center/contain no-repeat;
   image-rendering: pixelated;
   animation: wiggle 2.8s ease-in-out infinite;
 }
-
 .modal label {
-  display: block;
-  color: #D05D1A;
-  font-weight: 700;
-  font-size: 0.85em;
-  margin-bottom: 6px;
-  margin-top: 14px;
+  display: block; color: #D05D1A; font-weight: 700;
+  font-size: 0.85em; margin-bottom: 6px; margin-top: 14px;
 }
-
-.modal label:first-of-type {
-  margin-top: 0;
-}
-
-.modal input[type="text"] {
-  width: 100%;
-  padding: 10px 14px;
+.modal label:first-of-type { margin-top: 0; }
+.modal input[type="text"], .modal input[type="password"] {
+  width: 100%; padding: 10px 14px;
   border: 1.5px solid rgba(255, 213, 79, 0.55);
   border-radius: 12px;
   background: linear-gradient(180deg, #FFFDF0 0%, #FFF8CC 100%);
-  color: #D05D1A;
-  font-size: 1em;
-  font-weight: 700;
-  font-family: inherit;
-  outline: none;
+  color: #D05D1A; font-size: 1em; font-weight: 700;
+  font-family: inherit; outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-
-.modal input[type="text"]:focus {
+.modal input[type="text"]:focus, .modal input[type="password"]:focus {
   border-color: #F5A623;
   box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
 }
-
-.modal input[type="text"]::placeholder {
-  color: #D05D1A;
-  opacity: 0.3;
-  font-weight: 400;
+.modal input::placeholder {
+  color: #D05D1A; opacity: 0.3; font-weight: 400;
 }
-
 .modal-hint {
-  font-size: 0.75em;
+  font-size: 0.75em; color: #D05D1A;
+  opacity: 0.45; margin-top: 4px;
+}
+.author-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.author-row input { flex: 1; }
+.btn-clear-name {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  border: 1.5px solid rgba(208, 93, 26, 0.2);
+  background: transparent;
+  border-radius: 10px;
   color: #D05D1A;
-  opacity: 0.45;
-  margin-top: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: all 0.2s;
 }
-
+.btn-clear-name:hover {
+  background: rgba(255, 250, 220, 0.6);
+  border-color: rgba(208, 93, 26, 0.4);
+}
 .modal-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 22px;
+  display: flex; gap: 10px; margin-top: 22px;
 }
-
 .btn-cancel {
-  flex: 1;
-  padding: 10px;
+  flex: 1; padding: 10px;
   background: transparent;
   border: 1.5px solid rgba(208, 93, 26, 0.2);
   border-radius: 12px;
-  color: #D05D1A;
-  font-weight: 700;
-  font-size: 0.9em;
-  cursor: pointer;
-  font-family: inherit;
+  color: #D05D1A; font-weight: 700; font-size: 0.9em;
+  cursor: pointer; font-family: inherit;
   transition: all 0.2s;
 }
-
-.btn-cancel:hover {
-  background: rgba(255, 250, 220, 0.5);
-  border-color: rgba(208, 93, 26, 0.35);
-}
-
+.btn-cancel:hover { background: rgba(255, 250, 220, 0.5); }
 .btn-confirm {
-  flex: 1.5;
-  padding: 10px;
+  flex: 1.5; padding: 10px;
   background: linear-gradient(135deg, #F5A623 0%, #E8871E 100%);
-  border: none;
-  border-radius: 12px;
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.9em;
-  cursor: pointer;
-  font-family: inherit;
+  border: none; border-radius: 12px;
+  color: #fff; font-weight: 700; font-size: 0.9em;
+  cursor: pointer; font-family: inherit;
   box-shadow: 0 3px 12px rgba(245, 166, 35, 0.35);
   transition: all 0.2s;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+.btn-confirm:hover { transform: translateY(-1px); }
+.btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* 🔥 关键修复：动画终点足够远 */
+@keyframes danmakuFloat {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-100vw - 100%)); }
 }
 
-.btn-confirm:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 18px rgba(245, 166, 35, 0.45);
-}
-
-.btn-confirm:active {
-  transform: translateY(0);
-}
-
-.btn-confirm:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-/* ====== 工具按钮通用 ====== */
+/* 工具按钮 */
 .tool-btn {
-  position: fixed;
-  z-index: 99;
-  width: 40px; height: 40px;
+  position: fixed; z-index: 99;
+  width: 42px; height: 42px;
   border-radius: 50%;
   border: 1.5px solid rgba(255, 213, 79, 0.55);
   background: rgba(255, 253, 240, 0.92);
-  color: #D05D1A;
-  font-size: 1em;
+  color: #D05D1A; font-size: 1em;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   box-shadow: 0 2px 8px rgba(255, 237, 107, 0.3);
   transition: all 0.2s;
 }
-
 .tool-btn:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 14px rgba(255, 237, 107, 0.4);
 }
+.btn-pause { bottom: 76px; right: 16px; }
+.btn-list-view { bottom: 76px; right: 68px; }
 
-.btn-pause {
-  bottom: 76px;
-  right: 16px;
-}
-
-.btn-list-view {
-  bottom: 76px;
-  right: 64px;
-}
-
-/* ====== 列表视图 ====== */
+/* 列表视图 */
 .list-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(208, 93, 26, 0.1);
   backdrop-filter: blur(4px);
   z-index: 150;
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0; pointer-events: none;
   transition: opacity 0.3s ease;
 }
-
-.list-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
+.list-overlay.active { opacity: 1; pointer-events: auto; }
 .list-panel {
-  position: fixed;
-  top: 0; right: 0; bottom: 0;
-  width: 360px;
-  max-width: 90vw;
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: 360px; max-width: 90vw;
   background: linear-gradient(180deg, #FFFDF0 0%, #FFF8CC 60%, #FFF5A5 100%);
   border-left: 2px solid #FFD54F;
   box-shadow: -4px 0 20px rgba(255, 237, 107, 0.25);
   z-index: 151;
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column;
   transform: translateX(100%);
   transition: transform 0.35s cubic-bezier(.34, 1.3, .64, 1);
 }
-
-.list-overlay.active .list-panel {
-  transform: translateX(0);
-}
-
+.list-overlay.active .list-panel { transform: translateX(0); }
 .list-panel-header {
   padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   background: linear-gradient(90deg, #FFFADC 0%, #FFF5A5 45%, #FFED6B 100%);
   border-bottom: 2.5px dashed #FFD54F;
 }
-
 .list-panel-title {
-  color: #D05D1A;
-  font-weight: 700;
-  font-size: 0.95em;
+  color: #D05D1A; font-weight: 700; font-size: 0.95em;
 }
-
 .btn-close-list {
   width: 30px; height: 30px;
   border-radius: 50%;
   border: 1.5px solid rgba(208, 93, 26, 0.2);
   background: transparent;
-  color: #D05D1A;
-  font-size: 1em;
+  color: #D05D1A; font-size: 1em;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   transition: all 0.2s;
 }
-
-.btn-close-list:hover {
-  background: rgba(255, 250, 220, 0.5);
-}
-
+.btn-close-list:hover { background: rgba(255, 250, 220, 0.5); }
 .list-panel-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 12px 16px;
+  flex: 1; overflow-y: auto; padding: 12px 16px;
 }
-
 .list-panel-content::-webkit-scrollbar { width: 6px; }
 .list-panel-content::-webkit-scrollbar-track {
-  background: linear-gradient(180deg, rgba(255,250,220,.2), rgba(255,245,165,.15));
+  background: rgba(255,245,165,.15);
   border-radius: 3px;
 }
 .list-panel-content::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #FFED6B 0%, #FFD54F 50%, #FFC107 100%);
   border-radius: 3px;
 }
-
 .list-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 10px 12px;
   border-radius: 12px;
   margin-bottom: 6px;
@@ -479,218 +352,139 @@ body {
   border: 1px solid rgba(255, 213, 79, 0.25);
   transition: all 0.15s;
 }
-
 .list-item:hover {
   background: rgba(255, 250, 220, 0.9);
   border-color: rgba(255, 213, 79, 0.5);
 }
-
 .list-item-left {
-  flex: 1;
-  min-width: 0;
-  cursor: pointer;
+  flex: 1; min-width: 0; cursor: pointer;
+  overflow: hidden;
 }
-
 .list-item-content {
-  color: #D05D1A;
-  font-weight: 700;
-  font-size: 1em;
+  color: #D05D1A; font-weight: 700; font-size: 1em;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-
 .list-item-author {
-  color: #D05D1A;
-  opacity: 0.45;
-  font-size: 0.7em;
-  font-weight: 400;
+  color: #D05D1A; opacity: 0.5;
+  font-size: 0.7em; font-weight: 400;
   margin-top: 2px;
 }
-
 .list-item-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;margin-left: 8px;
+  display: flex; align-items: center; gap: 4px;
+  flex-shrink: 0; margin-left: 8px;
 }
-
-.list-item-copy,
-.list-item-delete {
-  font-size: 0.7em;
-  padding: 5px 10px;
-  border-radius: 8px;
+/* 🔥 删除按钮改成明显的小红圆钮！ */
+.btn-copy-mini, .btn-del-mini {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: none;
   cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.95em;
   transition: all 0.15s;
-  font-weight: 700;
 }
-
-.list-item-copy {
+.btn-copy-mini {
+  background: rgba(245, 166, 35, 0.15);
   color: #D05D1A;
-  opacity: 0.5;
-  background: rgba(255, 245, 165, 0.3);
+  border: 1.5px solid rgba(245, 166, 35, 0.3);
 }
-
-.list-item-copy:hover {
-  opacity: 0.8;
-  background: rgba(255, 245, 165, 0.6);
+.btn-copy-mini:hover {
+  background: rgba(245, 166, 35, 0.3);
+  transform: scale(1.1);
 }
-
-.list-item-delete {
+.btn-del-mini {
+  background: rgba(231, 76, 60, 0.12);
   color: #c0392b;
-  opacity: 0.45;
-  background: rgba(192, 57, 43, 0.06);
+  border: 1.5px solid rgba(231, 76, 60, 0.35);
+}
+.btn-del-mini:hover {
+  background: rgba(231, 76, 60, 0.25);
+  transform: scale(1.1);
 }
 
-.list-item-delete:hover {
-  opacity: 0.85;
-  background: rgba(192, 57, 43, 0.12);
-}
-
-/* ====== 删除确认弹窗 ====== */
+/* 删除确认弹窗 */
 .delete-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(208, 93, 26, 0.2);
   backdrop-filter: blur(4px);
   z-index: 300;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
   transition: opacity 0.3s ease;
 }
-
-.delete-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
+.delete-overlay.active { opacity: 1; pointer-events: auto; }
 .delete-modal {
   background: #FFFDF0;
   border: 2px solid #FFD54F;
   border-radius: 20px;
   padding: 24px 22px;
-  width: 85%;
-  max-width: 340px;
+  width: 85%; max-width: 340px;
   box-shadow: 0 12px 40px rgba(255, 237, 107, 0.3);
   transform: translateY(20px) scale(0.95);
   transition: transform 0.3s cubic-bezier(.34, 1.3, .64, 1);
 }
-
-.delete-overlay.active .delete-modal {
-  transform: translateY(0) scale(1);
-}
-
+.delete-overlay.active .delete-modal { transform: translateY(0) scale(1); }
 .delete-modal-title {
-  color: #D05D1A;
-  font-weight: 700;
-  font-size: 0.95em;
+  color: #D05D1A; font-weight: 700; font-size: 0.95em;
   margin-bottom: 6px;
 }
-
 .delete-modal-preview {
-  color: #D05D1A;
-  font-size: 1.3em;
-  font-weight: 700;
-  text-align: center;
-  padding: 10px;
-  margin: 10px 0;
+  color: #D05D1A; font-size: 1.3em; font-weight: 700;
+  text-align: center; padding: 10px; margin: 10px 0;
   background: rgba(255, 245, 165, 0.3);
   border-radius: 10px;
+  word-break: break-all;
 }
-
 .delete-modal label {
-  display: block;
-  color: #D05D1A;
-  font-weight: 700;
-  font-size: 0.8em;
-  margin-bottom: 6px;
-  margin-top: 12px;
+  display: block; color: #D05D1A; font-weight: 700;
+  font-size: 0.8em; margin-bottom: 6px; margin-top: 12px;
 }
-
 .delete-modal input[type="password"] {
-  width: 100%;
-  padding: 9px 12px;
+  width: 100%; padding: 9px 12px;
   border: 1.5px solid rgba(255, 213, 79, 0.55);
   border-radius: 10px;
   background: linear-gradient(180deg, #FFFDF0 0%, #FFF8CC 100%);
-  color: #D05D1A;
-  font-size: 0.9em;
-  font-family: inherit;
-  outline: none;
+  color: #D05D1A; font-size: 0.9em;
+  font-family: inherit; outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 .delete-modal input[type="password"]:focus {
   border-color: #F5A623;
   box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
 }
-
 .delete-modal-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 18px;
+  display: flex; gap: 10px; margin-top: 18px;
 }
-
 .btn-delete-cancel {
-  flex: 1;
-  padding: 9px;
+  flex: 1; padding: 9px;
   background: transparent;
   border: 1.5px solid rgba(208, 93, 26, 0.2);
   border-radius: 10px;
-  color: #D05D1A;
-  font-weight: 700;
-  font-size: 0.85em;
-  cursor: pointer;
-  font-family: inherit;
+  color: #D05D1A; font-weight: 700; font-size: 0.85em;
+  cursor: pointer; font-family: inherit;
   transition: all 0.2s;
 }
-
-.btn-delete-cancel:hover {
-  background: rgba(255, 250, 220, 0.5);
-}
-
+.btn-delete-cancel:hover { background: rgba(255, 250, 220, 0.5); }
 .btn-delete-confirm {
-  flex: 1;
-  padding: 9px;
+  flex: 1; padding: 9px;
   background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.85em;
-  cursor: pointer;
-  font-family: inherit;
+  border: none; border-radius: 10px;
+  color: #fff; font-weight: 700; font-size: 0.85em;
+  cursor: pointer; font-family: inherit;
   box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
   transition: all 0.2s;
 }
-
-.btn-delete-confirm:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 16px rgba(231, 76, 60, 0.4);
-}
-
-.btn-delete-confirm:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
+.btn-delete-confirm:hover { transform: translateY(-1px); }
+.btn-delete-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
 .delete-error {
-  color: #c0392b;
-  font-size: 0.75em;
-  font-weight: 700;
-  margin-top: 6px;
-  min-height: 1em;
+  color: #c0392b; font-size: 0.75em; font-weight: 700;
+  margin-top: 6px; min-height: 1em;
 }
 
-/* ====== 响应式 ====== */
 @media (max-width: 480px) {
   .danmaku-item { font-size: 1em; padding: 5px 12px; }
-  .header { padding: 10px 14px; }
   .header-title { font-size: 0.95em; }
-  .footer { padding: 10px 14px; }
 }
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -701,24 +495,19 @@ body {
 </head>
 <body>
 
-<!--顶部 -->
 <div class="header">
   <div class="header-icon"></div>
   <div class="header-title">✦ 颜文字收集墙 ✦</div>
   <div class="header-toast"></div>
 </div>
 
-<!--弹幕区 -->
 <div class="danmaku-stage" id="stage"></div>
 
-<!-- 复制反馈 -->
 <div class="copy-toast" id="copyToast">已复制！ (ᐢ..ᐢ)✧</div>
 
-<!-- 工具按钮 -->
 <button class="tool-btn btn-pause" id="btnPause" title="暂停/继续">⏸</button>
-<button class="tool-btn btn-list-view" id="btnListView" title="列表查看">☰</button>
+<button class="tool-btn btn-list-view" id="btnListView" title="列表">☰</button>
 
-<!-- 底部 -->
 <div class="footer">
   <div class="footer-count" id="footerCount">收集中...</div>
   <button class="btn-submit" id="btnSubmit">
@@ -738,7 +527,11 @@ body {
     <input type="text" id="inputKaomoji" placeholder="(｡･ω･｡)" maxlength="100" autocomplete="off">
     <div class="modal-hint">100字符以内～</div>
     <label for="inputAuthor">你的名字（选填）</label>
-    <input type="text" id="inputAuthor" placeholder="不填就匿名啦～" maxlength="20" autocomplete="off">
+    <div class="author-row">
+      <input type="text" id="inputAuthor" placeholder="不填就匿名啦～" maxlength="20" autocomplete="off">
+      <button type="button" class="btn-clear-name" id="btnClearName" title="清除保存的名字">✕</button>
+    </div>
+    <div class="modal-hint">会记住你的名字哦～点✕清除</div>
     <div class="modal-actions">
       <button class="btn-cancel" id="btnCancel">算了</button>
       <button class="btn-confirm" id="btnConfirm">发射！</button>
@@ -750,7 +543,7 @@ body {
 <div class="list-overlay" id="listOverlay">
   <div class="list-panel">
     <div class="list-panel-header">
-      <div class="list-panel-title">全部颜文字</div>
+      <div class="list-panel-title">全部颜文字 · 📋复制 / 🗑删除</div>
       <button class="btn-close-list" id="btnCloseList">✕</button>
     </div>
     <div class="list-panel-content" id="listContent"></div>
@@ -774,39 +567,39 @@ body {
 
 <script>
 (function() {
-  var stage = document.getElementById('stage');
-  var copyToast = document.getElementById('copyToast');
-  var footerCount = document.getElementById('footerCount');
-  var btnSubmit = document.getElementById('btnSubmit');
-  var btnPause = document.getElementById('btnPause');
-  var btnListView = document.getElementById('btnListView');
-  var modalOverlay = document.getElementById('modalOverlay');
-  var inputKaomoji = document.getElementById('inputKaomoji');
-  var inputAuthor = document.getElementById('inputAuthor');
-  var btnCancel = document.getElementById('btnCancel');
-  var btnConfirm = document.getElementById('btnConfirm');
-  var listOverlay = document.getElementById('listOverlay');
-  var listContent = document.getElementById('listContent');
-  var btnCloseList = document.getElementById('btnCloseList');
-  var deleteOverlay = document.getElementById('deleteOverlay');
-  var deletePreview = document.getElementById('deletePreview');
-  var deletePassword = document.getElementById('deletePassword');
-  var deleteError = document.getElementById('deleteError');
-  var btnDeleteCancel = document.getElementById('btnDeleteCancel');
-  var btnDeleteConfirm = document.getElementById('btnDeleteConfirm');
+  const stage = document.getElementById('stage');
+  const copyToast = document.getElementById('copyToast');
+  const footerCount = document.getElementById('footerCount');
+  const btnSubmit = document.getElementById('btnSubmit');
+  const btnPause = document.getElementById('btnPause');
+  const btnListView = document.getElementById('btnListView');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const inputKaomoji = document.getElementById('inputKaomoji');
+  const inputAuthor = document.getElementById('inputAuthor');
+  const btnClearName = document.getElementById('btnClearName');
+  const btnCancel = document.getElementById('btnCancel');
+  const btnConfirm = document.getElementById('btnConfirm');
+  const listOverlay = document.getElementById('listOverlay');
+  const listContent = document.getElementById('listContent');
+  const btnCloseList = document.getElementById('btnCloseList');
+  const deleteOverlay = document.getElementById('deleteOverlay');
+  const deletePreview = document.getElementById('deletePreview');
+  const deletePassword = document.getElementById('deletePassword');
+  const deleteError = document.getElementById('deleteError');
+  const btnDeleteCancel = document.getElementById('btnDeleteCancel');
+  const btnDeleteConfirm = document.getElementById('btnDeleteConfirm');
 
-  var allKaomoji = [];
-  var isPaused = false;
-  var activeDanmaku = []; // {el, x, speed, width}
-  var spawnTimer = null;
-  var rafId = null;
-  var deleteTargetId = null;
-  var lastTime = 0;
+  const STORAGE_KEY_NAME = 'kaomoji_wall_author';
 
-  // ====== 加载数据 ======
+  let allKaomoji = [];
+  let isPaused = false;
+  let danmakuPool = [];
+  let spawnTimer = null;
+  let deleteTargetId = null;
+
   async function loadData() {
     try {
-      var res = await fetch('/api/kaomoji');
+      const res = await fetch('/api/kaomoji');
       allKaomoji = await res.json();
       footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
       startDanmaku();
@@ -815,123 +608,96 @@ body {
     }
   }
 
-  // ====== 弹幕系统（用requestAnimationFrame 代替 CSS animation）======
   function spawnDanmaku(item) {
-    var el = document.createElement('div');
+    const el = document.createElement('div');
     el.className = 'danmaku-item';
-
-    var html = escapeHtml(item.content);
+    let html = escapeHtml(item.content);
     if (item.author) {
       html += '<span class="danmaku-author">— ' + escapeHtml(item.author) + '</span>';
     }
     el.innerHTML = html;
 
-    var stageW = stage.offsetWidth;
-    var stageH = stage.offsetHeight;
-    var itemH = 44;
-    var lanes = Math.max(1, Math.floor((stageH - 20) / (itemH + 14)));
-    var lane = Math.floor(Math.random() * lanes);
-    var top = 10 + lane * (itemH + 14) + Math.floor(Math.random() * 8);
-
+    const stageH = stage.offsetHeight;
+    const itemH = 46;
+    const lanes = Math.max(1, Math.floor((stageH - 20) / (itemH + 10)));
+    const lane = Math.floor(Math.random() * lanes);
+    const top = 10 + lane * (itemH + 10) + Math.random() * 6;
     el.style.top = top + 'px';
-    el.style.position = 'absolute';
 
-    //随机大小
-    var scale = 0.9 + Math.random() * 0.35;
+    // 速度：8~18秒
+    const duration = 8 + Math.random() * 10;
+    const scale = 0.95 + Math.random() * 0.3;
     el.style.fontSize = scale + 'em';
+    el.style.animationName = 'danmakuFloat';
+    el.style.animationDuration = duration + 's';
 
-    // pointerdown 代替 click，按下就触发复制！
-    el.addEventListener('pointerdown', function(e) {
-      e.stopPropagation();
-      e.preventDefault();
-      copyToClipboard(item.content);
-    });
-
-    stage.appendChild(el);
-
-    // 元素实际宽度需要渲染后获取
-    var elWidth = el.offsetWidth;
-
-    // 起始位置：屏幕右边外
-    var startX = stageW + 10;
-    // 结束位置：完全移出屏幕左边
-    var endX = -(elWidth + 20);
-    // 速度：像素/秒，120~220之间随机
-    var speed = 120 + Math.random() * 100;
-
-    var danmakuObj = {
-      el: el,
-      x: startX,
-      endX: endX,
-      speed: speed,
-      alive: true
-    };
-
-    el.style.left = startX + 'px';
-
-    activeDanmaku.push(danmakuObj);
-  }
-
-  //动画循环
-  function animationLoop(timestamp) {
-    if (!lastTime) lastTime = timestamp;
-    var delta = (timestamp - lastTime) / 1000; // 秒
-    lastTime = timestamp;
-
-    if (!isPaused) {
-      for (var i = activeDanmaku.length - 1; i >= 0; i--) {
-        var d = activeDanmaku[i];
-        if (!d.alive) continue;
-
-        d.x -= d.speed * delta;
-        d.el.style.left = d.x + 'px';
-
-        // 完全离开屏幕左侧
-        if (d.x <= d.endX) {
-          d.alive = false;
-          d.el.remove();
-          activeDanmaku.splice(i, 1);
-        }
-      }
+    if (isPaused) {
+      el.style.animationPlayState = 'paused';
     }
 
-    rafId = requestAnimationFrame(animationLoop);
+    // 🔥 关键修复：用 pointerdown 立即触发，而不是等 click
+    // 并且按下时先暂停动画，给一个明确的视觉反馈
+    let pressed = false;
+    const onPress = function(e) {
+      if (pressed) return;
+      pressed = true;
+      e.preventDefault();
+      e.stopPropagation();
+      // 短暂暂停 + 闪一下
+      el.style.animationPlayState = 'paused';
+      el.classList.add('flash');
+      copyToClipboard(item.content);
+      setTimeout(function() {
+        if (el.parentNode) {
+          el.classList.remove('flash');
+          if (!isPaused) el.style.animationPlayState = 'running';
+        }
+        pressed = false;
+      }, 300);
+    };
+
+    // 优先用 pointerdown（现代浏览器统一处理鼠标/触摸/笔）
+    if (window.PointerEvent) {
+      el.addEventListener('pointerdown', onPress);
+    } else {
+      el.addEventListener('touchstart', onPress, { passive: false });
+      el.addEventListener('mousedown', onPress);
+    }
+
+    stage.appendChild(el);
+    danmakuPool.push(el);
+
+    el.addEventListener('animationend', function() {
+      el.remove();
+      const idx = danmakuPool.indexOf(el);
+      if (idx > -1) danmakuPool.splice(idx, 1);
+    });
   }
 
   function startDanmaku() {
     if (spawnTimer) clearInterval(spawnTimer);
     if (allKaomoji.length === 0) return;
 
-    // 启动动画循环
-    if (!rafId) {
-      lastTime = 0;
-      rafId = requestAnimationFrame(animationLoop);
-    }
-
-    // 初始撒一波，间隔开
-    var initial = Math.min(allKaomoji.length, 8);
-    var shuffled = allKaomoji.slice().sort(function() { return Math.random() - 0.5; });
-    for (var i = 0; i < initial; i++) {
+    const initial = Math.min(allKaomoji.length, 8);
+    for (let i = 0; i < initial; i++) {
       (function(idx) {
         setTimeout(function() {
-          if (allKaomoji.length > 0) {
-            spawnDanmaku(shuffled[idx % shuffled.length]);
+          if (!isPaused && allKaomoji.length > 0) {
+            spawnDanmaku(allKaomoji[idx % allKaomoji.length]);
           }
-        }, idx * 500);
+        }, idx * 450);
       })(i);
     }
 
-    // 持续生成
     spawnTimer = setInterval(function() {
       if (isPaused || allKaomoji.length === 0) return;
-      var item = allKaomoji[Math.floor(Math.random() * allKaomoji.length)];
+      const item = allKaomoji[Math.floor(Math.random() * allKaomoji.length)];
       spawnDanmaku(item);
-    }, 1600+ Math.floor(Math.random() * 900));
+    }, 1400 + Math.random() * 800);
   }
 
-  // ====== 复制 ======
   function copyToClipboard(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
+    if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext !== false) {
       navigator.clipboard.writeText(text).then(showCopyToast).catch(function() {
         fallbackCopy(text);
       });
@@ -941,18 +707,20 @@ body {
   }
 
   function fallbackCopy(text) {
-    var ta = document.createElement('textarea');
+    const ta = document.createElement('textarea');
     ta.value = text;
     ta.style.position = 'fixed';
     ta.style.left = '-9999px';
+    ta.style.top = '0';
     document.body.appendChild(ta);
+    ta.focus();
     ta.select();
     try { document.execCommand('copy'); } catch(e) {}
     document.body.removeChild(ta);
     showCopyToast();
   }
 
-  var copyToastTimer = null;
+  let copyToastTimer = null;
   function showCopyToast() {
     copyToast.classList.add('show');
     if (copyToastTimer) clearTimeout(copyToastTimer);
@@ -961,17 +729,29 @@ body {
     }, 1200);
   }
 
-  // ====== 暂停 ======
   btnPause.addEventListener('click', function() {
     isPaused = !isPaused;
-    btnPause.textContent = isPaused ? '▶' : '⏸';});
+    btnPause.textContent = isPaused ? '▶' : '⏸';
+    danmakuPool.forEach(function(el) {
+      if (!el.classList.contains('flash')) {
+        el.style.animationPlayState = isPaused ? 'paused' : 'running';
+      }
+    });
+  });
 
-  // ====== 投稿弹窗 ======
   btnSubmit.addEventListener('click', function() {
     modalOverlay.classList.add('active');
     inputKaomoji.value = '';
-    inputAuthor.value = '';
+    // 🔥 从 localStorage 读取上次的名字
+    const savedName = localStorage.getItem(STORAGE_KEY_NAME) || '';
+    inputAuthor.value = savedName;
     setTimeout(function() { inputKaomoji.focus(); }, 300);
+  });
+
+  btnClearName.addEventListener('click', function() {
+    inputAuthor.value = '';
+    localStorage.removeItem(STORAGE_KEY_NAME);
+    inputAuthor.focus();
   });
 
   btnCancel.addEventListener('click', function() {
@@ -983,28 +763,37 @@ body {
   });
 
   btnConfirm.addEventListener('click', submitKaomoji);
-  inputKaomoji.addEventListener('keydown', function(e) { if (e.key === 'Enter') submitKaomoji(); });
-  inputAuthor.addEventListener('keydown', function(e) { if (e.key === 'Enter') submitKaomoji(); });
+  inputKaomoji.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') submitKaomoji();
+  });
+  inputAuthor.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') submitKaomoji();
+  });
 
   async function submitKaomoji() {
-    var content = inputKaomoji.value.trim();
+    const content = inputKaomoji.value.trim();
     if (!content) { inputKaomoji.focus(); return; }
+    const authorName = inputAuthor.value.trim();
     btnConfirm.disabled = true;
     btnConfirm.textContent = '发射中...';
     try {
-      var res = await fetch('/api/kaomoji', {
+      const res = await fetch('/api/kaomoji', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: content, author: inputAuthor.value.trim() })
+        body: JSON.stringify({ content: content, author: authorName })
       });
       if (!res.ok) {
-        var err = await res.json();
+        const err = await res.json();
         alert(err.error || '发射失败了 (╥﹏╥)');
         return;
       }
-      var newItem = await res.json();
+      const newItem = await res.json();
       allKaomoji.unshift(newItem);
       footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
+      // 🔥 记住名字到 localStorage
+      if (authorName) {
+        localStorage.setItem(STORAGE_KEY_NAME, authorName);
+      }
       modalOverlay.classList.remove('active');
       spawnDanmaku(newItem);
     } catch (e) {
@@ -1015,24 +804,25 @@ body {
     }
   }
 
-  // ====== 列表视图 ======
   btnListView.addEventListener('click', function() {
     renderList();
     listOverlay.classList.add('active');
   });
-
   btnCloseList.addEventListener('click', function() {
     listOverlay.classList.remove('active');
   });
-
   listOverlay.addEventListener('click', function(e) {
     if (e.target === listOverlay) listOverlay.classList.remove('active');
   });
 
   function renderList() {
     listContent.innerHTML = '';
+    if (allKaomoji.length === 0) {
+      listContent.innerHTML = '<div style="text-align:center;padding:40px 20px;color:#D05D1A;opacity:0.5;">还没有颜文字哦～</div>';
+      return;
+    }
     allKaomoji.forEach(function(item) {
-      var el = document.createElement('div');
+      const el = document.createElement('div');
       el.className = 'list-item';
       el.innerHTML =
         '<div class="list-item-left">' +
@@ -1040,18 +830,18 @@ body {
           (item.author ? '<div class="list-item-author">— ' + escapeHtml(item.author) + '</div>' : '') +
         '</div>' +
         '<div class="list-item-actions">' +
-          '<span class="list-item-copy" data-action="copy">复制</span>' +
-          '<span class="list-item-delete" data-action="delete">删除</span>' +
+          '<button class="btn-copy-mini" title="复制">📋</button>' +
+          '<button class="btn-del-mini" title="删除">🗑</button>' +
         '</div>';
 
       el.querySelector('.list-item-left').addEventListener('click', function() {
         copyToClipboard(item.content);
       });
-      el.querySelector('[data-action="copy"]').addEventListener('click', function(e) {
+      el.querySelector('.btn-copy-mini').addEventListener('click', function(e) {
         e.stopPropagation();
         copyToClipboard(item.content);
       });
-      el.querySelector('[data-action="delete"]').addEventListener('click', function(e) {
+      el.querySelector('.btn-del-mini').addEventListener('click', function(e) {
         e.stopPropagation();
         openDeleteModal(item);
       });
@@ -1060,7 +850,6 @@ body {
     });
   }
 
-  // ====== 删除功能 ======
   function openDeleteModal(item) {
     deleteTargetId = item.id;
     deletePreview.textContent = item.content;
@@ -1071,35 +860,37 @@ body {
   }
 
   btnDeleteCancel.addEventListener('click', function() {
-    deleteOverlay.classList.remove('active');deleteTargetId = null;
+    deleteOverlay.classList.remove('active');
+    deleteTargetId = null;
   });
-
   deleteOverlay.addEventListener('click', function(e) {
     if (e.target === deleteOverlay) {
       deleteOverlay.classList.remove('active');
       deleteTargetId = null;
     }
   });
-
-  deletePassword.addEventListener('keydown', function(e) { if (e.key === 'Enter') doDelete(); });
+  deletePassword.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doDelete();
+  });
   btnDeleteConfirm.addEventListener('click', doDelete);
 
   async function doDelete() {
     if (!deleteTargetId) return;
-    var pw = deletePassword.value;
+    const pw = deletePassword.value;
     if (!pw) { deleteError.textContent = '请输入管理密码～'; return; }
     btnDeleteConfirm.disabled = true;
     btnDeleteConfirm.textContent = '删除中...';
     deleteError.textContent = '';
     try {
-      var res = await fetch('/api/kaomoji/' + deleteTargetId, {
+      const res = await fetch('/api/kaomoji/' + deleteTargetId, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: pw })
       });
       if (!res.ok) {
-        var err = await res.json();
-        deleteError.textContent = err.error || '删除失败了';return;
+        const err = await res.json();
+        deleteError.textContent = err.error || '删除失败了';
+        return;
       }
       allKaomoji = allKaomoji.filter(function(k) { return k.id !== deleteTargetId; });
       footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
@@ -1115,12 +906,11 @@ body {
   }
 
   function escapeHtml(s) {
-    var d = document.createElement('div');
+    const d = document.createElement('div');
     d.textContent = s;
     return d.innerHTML;
   }
 
-  // 启动！
   loadData();
 })();
 </script>
