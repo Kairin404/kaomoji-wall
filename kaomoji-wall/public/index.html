@@ -85,7 +85,7 @@ body {
   pointer-events: none;
 }
 
-/*====== 单条弹幕 ====== */
+/* ====== 单条弹幕 ====== */
 .danmaku-item {
   position: absolute;
   white-space: nowrap;
@@ -99,15 +99,12 @@ body {
   color: #D05D1A;
   font-weight: 700;
   font-size: 1.2em;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
   user-select: none;
   will-change: transform;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
+  /* 不用CSS animation了，改用JS控制 */
 }
 
 .danmaku-item:hover {
-  transform: scale(1.12) !important;
   box-shadow: 0 4px 16px rgba(255, 237, 107, 0.45);
   background: rgba(255, 250, 220, 0.95);
   z-index: 50;
@@ -207,7 +204,8 @@ body {
   z-index: 200;
   display: flex;
   align-items: center;
-  justify-content: center;opacity: 0;
+  justify-content: center;
+  opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
@@ -350,12 +348,6 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none !important;
-}
-
-/* ====== 弹幕动画 ====== */
-@keyframes danmakuFloat {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-100vw - 100%)); }
 }
 
 /* ====== 工具按钮通用 ====== */
@@ -509,46 +501,47 @@ body {
   color: #D05D1A;
   opacity: 0.45;
   font-size: 0.7em;
-  font-weight: 400;margin-top: 2px;
+  font-weight: 400;
+  margin-top: 2px;
 }
 
 .list-item-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-  margin-left: 8px;
+  gap: 4px;
+  flex-shrink: 0;margin-left: 8px;
+}
+
+.list-item-copy,
+.list-item-delete {
+  font-size: 0.7em;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 700;
 }
 
 .list-item-copy {
-  font-size: 0.65em;
   color: #D05D1A;
-  opacity: 0.35;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: all 0.15s;
+  opacity: 0.5;
+  background: rgba(255, 245, 165, 0.3);
 }
 
 .list-item-copy:hover {
-  opacity: 0.7;
-  background: rgba(255, 245, 165, 0.5);
+  opacity: 0.8;
+  background: rgba(255, 245, 165, 0.6);
 }
 
 .list-item-delete {
-  font-size: 0.65em;
-  color: #D05D1A;
-  opacity: 0.25;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: all 0.15s;
+  color: #c0392b;
+  opacity: 0.45;
+  background: rgba(192, 57, 43, 0.06);
 }
 
 .list-item-delete:hover {
-  opacity: 0.7;
-  background: rgba(232, 135, 30, 0.1);
-  color: #c0392b;
+  opacity: 0.85;
+  background: rgba(192, 57, 43, 0.12);
 }
 
 /* ====== 删除确认弹窗 ====== */
@@ -728,7 +721,8 @@ body {
 <!-- 底部 -->
 <div class="footer">
   <div class="footer-count" id="footerCount">收集中...</div>
-  <button class="btn-submit" id="btnSubmit"><span class="btn-submit-icon"></span>
+  <button class="btn-submit" id="btnSubmit">
+    <span class="btn-submit-icon"></span>
     投个颜文字！
   </button>
 </div>
@@ -780,37 +774,39 @@ body {
 
 <script>
 (function() {
-  const stage = document.getElementById('stage');
-  const copyToast = document.getElementById('copyToast');
-  const footerCount = document.getElementById('footerCount');
-  const btnSubmit = document.getElementById('btnSubmit');
-  const btnPause = document.getElementById('btnPause');
-  const btnListView = document.getElementById('btnListView');
-  const modalOverlay = document.getElementById('modalOverlay');
-  const inputKaomoji = document.getElementById('inputKaomoji');
-  const inputAuthor = document.getElementById('inputAuthor');
-  const btnCancel = document.getElementById('btnCancel');
-  const btnConfirm = document.getElementById('btnConfirm');
-  const listOverlay = document.getElementById('listOverlay');
-  const listContent = document.getElementById('listContent');
-  const btnCloseList = document.getElementById('btnCloseList');
-  const deleteOverlay = document.getElementById('deleteOverlay');
-  const deletePreview = document.getElementById('deletePreview');
-  const deletePassword = document.getElementById('deletePassword');
-  const deleteError = document.getElementById('deleteError');
-  const btnDeleteCancel = document.getElementById('btnDeleteCancel');
-  const btnDeleteConfirm = document.getElementById('btnDeleteConfirm');
+  var stage = document.getElementById('stage');
+  var copyToast = document.getElementById('copyToast');
+  var footerCount = document.getElementById('footerCount');
+  var btnSubmit = document.getElementById('btnSubmit');
+  var btnPause = document.getElementById('btnPause');
+  var btnListView = document.getElementById('btnListView');
+  var modalOverlay = document.getElementById('modalOverlay');
+  var inputKaomoji = document.getElementById('inputKaomoji');
+  var inputAuthor = document.getElementById('inputAuthor');
+  var btnCancel = document.getElementById('btnCancel');
+  var btnConfirm = document.getElementById('btnConfirm');
+  var listOverlay = document.getElementById('listOverlay');
+  var listContent = document.getElementById('listContent');
+  var btnCloseList = document.getElementById('btnCloseList');
+  var deleteOverlay = document.getElementById('deleteOverlay');
+  var deletePreview = document.getElementById('deletePreview');
+  var deletePassword = document.getElementById('deletePassword');
+  var deleteError = document.getElementById('deleteError');
+  var btnDeleteCancel = document.getElementById('btnDeleteCancel');
+  var btnDeleteConfirm = document.getElementById('btnDeleteConfirm');
 
-  let allKaomoji = [];
-  let isPaused = false;
-  let danmakuPool = [];
-  let spawnTimer = null;
-  let deleteTargetId = null;
+  var allKaomoji = [];
+  var isPaused = false;
+  var activeDanmaku = []; // {el, x, speed, width}
+  var spawnTimer = null;
+  var rafId = null;
+  var deleteTargetId = null;
+  var lastTime = 0;
 
-  // 加载数据
+  // ====== 加载数据 ======
   async function loadData() {
     try {
-      const res = await fetch('/api/kaomoji');
+      var res = await fetch('/api/kaomoji');
       allKaomoji = await res.json();
       footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
       startDanmaku();
@@ -819,75 +815,121 @@ body {
     }
   }
 
-  // 生成弹幕
+  // ====== 弹幕系统（用requestAnimationFrame 代替 CSS animation）======
   function spawnDanmaku(item) {
-    const el = document.createElement('div');
+    var el = document.createElement('div');
     el.className = 'danmaku-item';
 
-    let html = escapeHtml(item.content);
+    var html = escapeHtml(item.content);
     if (item.author) {
       html += '<span class="danmaku-author">— ' + escapeHtml(item.author) + '</span>';
     }
     el.innerHTML = html;
 
-    const stageH = stage.offsetHeight;
-    const itemH = 42;
-    const lanes = Math.max(1, Math.floor((stageH - 20) / (itemH + 12)));
-    const lane = Math.floor(Math.random() * lanes);
-    const top = 10 + lane * (itemH + 12) + Math.random() * 6;
+    var stageW = stage.offsetWidth;
+    var stageH = stage.offsetHeight;
+    var itemH = 44;
+    var lanes = Math.max(1, Math.floor((stageH - 20) / (itemH + 14)));
+    var lane = Math.floor(Math.random() * lanes);
+    var top = 10 + lane * (itemH + 14) + Math.floor(Math.random() * 8);
 
     el.style.top = top + 'px';
-    el.style.right = '-400px';
+    el.style.position = 'absolute';
 
-    // 速度加快：8~18秒
-    const duration = 8 + Math.random() * 10;
-    const scale = 0.9 + Math.random() * 0.35;
+    //随机大小
+    var scale = 0.9 + Math.random() * 0.35;
     el.style.fontSize = scale + 'em';
-    el.style.animationName = 'danmakuFloat';
-    el.style.animationDuration = duration + 's';
 
-    if (isPaused) {
-      el.style.animationPlayState = 'paused';
-    }
-
-    el.addEventListener('click', function(e) {
+    // pointerdown 代替 click，按下就触发复制！
+    el.addEventListener('pointerdown', function(e) {
       e.stopPropagation();
+      e.preventDefault();
       copyToClipboard(item.content);
     });
 
     stage.appendChild(el);
-    danmakuPool.push(el);
 
-    el.addEventListener('animationend', function() {
-      el.remove();
-      const idx = danmakuPool.indexOf(el);
-      if (idx > -1) danmakuPool.splice(idx, 1);
-    });
+    // 元素实际宽度需要渲染后获取
+    var elWidth = el.offsetWidth;
+
+    // 起始位置：屏幕右边外
+    var startX = stageW + 10;
+    // 结束位置：完全移出屏幕左边
+    var endX = -(elWidth + 20);
+    // 速度：像素/秒，120~220之间随机
+    var speed = 120 + Math.random() * 100;
+
+    var danmakuObj = {
+      el: el,
+      x: startX,
+      endX: endX,
+      speed: speed,
+      alive: true
+    };
+
+    el.style.left = startX + 'px';
+
+    activeDanmaku.push(danmakuObj);
+  }
+
+  //动画循环
+  function animationLoop(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    var delta = (timestamp - lastTime) / 1000; // 秒
+    lastTime = timestamp;
+
+    if (!isPaused) {
+      for (var i = activeDanmaku.length - 1; i >= 0; i--) {
+        var d = activeDanmaku[i];
+        if (!d.alive) continue;
+
+        d.x -= d.speed * delta;
+        d.el.style.left = d.x + 'px';
+
+        // 完全离开屏幕左侧
+        if (d.x <= d.endX) {
+          d.alive = false;
+          d.el.remove();
+          activeDanmaku.splice(i, 1);
+        }
+      }
+    }
+
+    rafId = requestAnimationFrame(animationLoop);
   }
 
   function startDanmaku() {
     if (spawnTimer) clearInterval(spawnTimer);
     if (allKaomoji.length === 0) return;
 
+    // 启动动画循环
+    if (!rafId) {
+      lastTime = 0;
+      rafId = requestAnimationFrame(animationLoop);
+    }
+
+    // 初始撒一波，间隔开
     var initial = Math.min(allKaomoji.length, 8);
+    var shuffled = allKaomoji.slice().sort(function() { return Math.random() - 0.5; });
     for (var i = 0; i < initial; i++) {
       (function(idx) {
         setTimeout(function() {
-          if (!isPaused && allKaomoji.length > 0) {
-            spawnDanmaku(allKaomoji[idx % allKaomoji.length]);
+          if (allKaomoji.length > 0) {
+            spawnDanmaku(shuffled[idx % shuffled.length]);
           }
         }, idx * 500);
       })(i);
     }
 
+    // 持续生成
     spawnTimer = setInterval(function() {
       if (isPaused || allKaomoji.length === 0) return;
       var item = allKaomoji[Math.floor(Math.random() * allKaomoji.length)];
       spawnDanmaku(item);
-    }, 1800+ Math.random() * 1000);
+    }, 1600+ Math.floor(Math.random() * 900));
   }
 
-  // 复制
+  // ====== 复制 ======
   function copyToClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(showCopyToast).catch(function() {
@@ -919,16 +961,12 @@ body {
     }, 1200);
   }
 
-  // 暂停
+  // ====== 暂停 ======
   btnPause.addEventListener('click', function() {
     isPaused = !isPaused;
-    btnPause.textContent = isPaused ? '▶' : '⏸';
-    danmakuPool.forEach(function(el) {
-      el.style.animationPlayState = isPaused ? 'paused' : 'running';
-    });
-  });
+    btnPause.textContent = isPaused ? '▶' : '⏸';});
 
-  // 投稿弹窗
+  // ====== 投稿弹窗 ======
   btnSubmit.addEventListener('click', function() {
     modalOverlay.classList.add('active');
     inputKaomoji.value = '';
@@ -945,13 +983,8 @@ body {
   });
 
   btnConfirm.addEventListener('click', submitKaomoji);
-
-  inputKaomoji.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') submitKaomoji();
-  });
-  inputAuthor.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') submitKaomoji();
-  });
+  inputKaomoji.addEventListener('keydown', function(e) { if (e.key === 'Enter') submitKaomoji(); });
+  inputAuthor.addEventListener('keydown', function(e) { if (e.key === 'Enter') submitKaomoji(); });
 
   async function submitKaomoji() {
     var content = inputKaomoji.value.trim();
@@ -982,7 +1015,7 @@ body {
     }
   }
 
-  // 列表视图
+  // ====== 列表视图 ======
   btnListView.addEventListener('click', function() {
     renderList();
     listOverlay.classList.add('active');
@@ -1027,7 +1060,7 @@ body {
     });
   }
 
-  // 删除功能
+  // ====== 删除功能 ======
   function openDeleteModal(item) {
     deleteTargetId = item.id;
     deletePreview.textContent = item.content;
@@ -1048,10 +1081,7 @@ body {
     }
   });
 
-  deletePassword.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') doDelete();
-  });
-
+  deletePassword.addEventListener('keydown', function(e) { if (e.key === 'Enter') doDelete(); });
   btnDeleteConfirm.addEventListener('click', doDelete);
 
   async function doDelete() {
@@ -1069,10 +1099,8 @@ body {
       });
       if (!res.ok) {
         var err = await res.json();
-        deleteError.textContent = err.error || '删除失败了';
-        return;
+        deleteError.textContent = err.error || '删除失败了';return;
       }
-      // 从本地数据移除
       allKaomoji = allKaomoji.filter(function(k) { return k.id !== deleteTargetId; });
       footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
       deleteOverlay.classList.remove('active');
