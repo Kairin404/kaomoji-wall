@@ -55,7 +55,7 @@ if (count === 0) {
 
 app.use(express.json());
 
-// ★ 禁止一切缓存 ★
+//★禁止一切缓存 ★
 const noCache = (req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
   res.setHeader('Pragma', 'no-cache');
@@ -64,11 +64,10 @@ const noCache = (req, res, next) => {
   next();
 };
 
-// 首页用动态读取 + 注入版本号，彻底杜绝手机缓存
+// 首页动态读取，注入版本号彻底杜绝手机缓存
 app.get('/', noCache, (req, res) => {
   const htmlPath = path.join(__dirname, 'public', 'index.html');
   let html = fs.readFileSync(htmlPath, 'utf-8');
-  // 在<head>里塞一个版本meta，文件改一次就变一次
   const version = fs.statSync(htmlPath).mtimeMs;
   html = html.replace('<head>', `<head>\n<meta name="version" content="${version}">`);
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
