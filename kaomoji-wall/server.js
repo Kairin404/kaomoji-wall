@@ -54,15 +54,27 @@ if (count === 0) {
 }
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
-//获取所有颜文字
+// ★★★ 关键修复：禁用静态文件缓存 ★★★
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+}));
+
+// API 也禁缓存
+app.use('/api', (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store');
+  next();
+});
+
 app.get('/api/kaomoji', (req, res) => {
   const rows = db.prepare('SELECT * FROM kaomoji ORDER BY created_at DESC').all();
   res.json(rows);
 });
 
-// 投稿新颜文字
 app.post('/api/kaomoji', (req, res) => {
   const { content, author } = req.body;
   if (!content || !content.trim()) {
@@ -78,7 +90,6 @@ app.post('/api/kaomoji', (req, res) => {
   res.json(newRow);
 });
 
-// 删除颜文字（需要管理密码）
 app.delete('/api/kaomoji/:id', (req, res) => {
   const { password } = req.body;
   if (password !== ADMIN_PASSWORD) {
