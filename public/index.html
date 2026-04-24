@@ -67,7 +67,6 @@ body {
   overflow: hidden; pointer-events: none;
 }
 
-/* 🔥 核心变化：不再用 CSS animation。弹幕由 JS 用 transform 驱动 */
 .danmaku-item {
   position: absolute;
   top: 0; left: 0;
@@ -89,6 +88,12 @@ body {
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+/* ★新增：自己投的弹幕高亮★ */
+.danmaku-item.mine {
+  background: linear-gradient(135deg, rgba(255,230,130,0.95), rgba(255,200,120,0.95));
+  border-color: #F5A623;
+  box-shadow: 0 2px 12px rgba(245, 166, 35, 0.35);
+}
 .danmaku-item.flash {
   background: rgba(255, 230, 130, 1) !important;
   border-color: #F5A623;
@@ -101,6 +106,16 @@ body {
   opacity: 0.55;
   margin-left: 6px;
   font-weight: 400;
+}
+.danmaku-item .mine-tag {
+  font-size: 0.55em;
+  background: #F5A623;
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 8px;
+  margin-left: 6px;
+  font-weight: 700;
+  vertical-align: middle;
 }
 
 .copy-toast {
@@ -115,6 +130,8 @@ body {
   opacity: 0; z-index: 999;
   transition: opacity 0.2s, transform 0.2s;
   box-shadow: 0 4px 20px rgba(208, 93, 26, 0.3);
+  text-align: center;
+  max-width: 80vw;
 }
 .copy-toast.show {
   opacity: 1;
@@ -209,6 +226,11 @@ body {
 .modal-hint {
   font-size: 0.75em; color: #D05D1A;
   opacity: 0.45; margin-top: 4px;
+}
+.modal-error {
+  font-size: 0.8em; color: #c0392b;
+  font-weight: 700;
+  margin-top: 8px; min-height: 1em;
 }
 .author-row { display: flex; align-items: center; gap: 8px; }
 .author-row input { flex: 1; }
@@ -308,6 +330,31 @@ body {
   transition: all 0.2s;
 }
 .btn-close-list:hover { background: rgba(255, 250, 220, 0.5); }
+
+/* ★新增：Tab切换★ */
+.list-tabs {
+  display: flex; gap: 6px;
+  padding: 10px 16px 0;
+}
+.list-tab {
+  flex: 1;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px 10px 0 0;
+  background: rgba(255, 213, 79, 0.2);
+  color: #D05D1A;
+  font-weight: 700;
+  font-size: 0.85em;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  border-bottom: 2.5px solid transparent;
+}
+.list-tab.active {
+  background: rgba(245, 166, 35, 0.15);
+  border-bottom-color: #F5A623;
+}
+
 .list-panel-content { flex: 1; overflow-y: auto; padding: 12px 16px; }
 .list-panel-content::-webkit-scrollbar { width: 6px; }
 .list-panel-content::-webkit-scrollbar-track {
@@ -327,6 +374,10 @@ body {
   border: 1px solid rgba(255, 213, 79, 0.25);
   transition: all 0.15s;
 }
+.list-item.mine {
+  background: rgba(255, 235, 170, 0.55);
+  border-color: rgba(245, 166, 35, 0.5);
+}
 .list-item:hover {
   background: rgba(255, 250, 220, 0.9);
   border-color: rgba(255, 213, 79, 0.5);
@@ -338,6 +389,19 @@ body {
 .list-item-content {
   color: #D05D1A; font-weight: 700; font-size: 1em;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+}
+.list-item-content .content-text {
+  overflow: hidden; text-overflow: ellipsis;
+}
+.list-item-content .mine-tag {
+  font-size: 0.7em;
+  background: #F5A623;
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 .list-item-author {
   color: #D05D1A; opacity: 0.5;
@@ -348,7 +412,7 @@ body {
   display: flex; align-items: center; gap: 4px;
   flex-shrink: 0; margin-left: 8px;
 }
-.btn-copy-mini, .btn-del-mini {
+.btn-copy-mini, .btn-del-mini, .btn-lock-mini {
   width: 32px; height: 32px;
   border-radius: 50%;
   border: none;
@@ -374,6 +438,16 @@ body {
 .btn-del-mini:hover {
   background: rgba(231, 76, 60, 0.25);
   transform: scale(1.1);
+}
+.btn-lock-mini {
+  background: rgba(160, 140, 100, 0.1);
+  color: #a08c64;
+  border: 1.5px solid rgba(160, 140, 100, 0.25);
+  opacity: 0.65;
+}
+.btn-lock-mini:hover {
+  background: rgba(160, 140, 100, 0.2);
+  opacity: 1;
 }
 
 .delete-overlay {
@@ -407,6 +481,17 @@ body {
   background: rgba(255, 245, 165, 0.3);
   border-radius: 10px;
   word-break: break-all;
+}
+.delete-modal-owner-note {
+  background: rgba(245, 166, 35, 0.12);
+  border: 1.5px dashed rgba(245, 166, 35, 0.5);
+  border-radius: 10px;
+  padding: 10px;
+  color: #D05D1A;
+  font-size: 0.82em;
+  font-weight: 700;
+  text-align: center;
+  margin: 10px 0 4px;
 }
 .delete-modal label {
   display: block; color: #D05D1A; font-weight: 700;
@@ -451,6 +536,13 @@ body {
   color: #c0392b; font-size: 0.75em; font-weight: 700;
   margin-top: 6px; min-height: 1em;
 }
+.empty-tip {
+  text-align: center;
+  padding: 40px 20px;
+  color: #D05D1A;
+  opacity: 0.5;
+  line-height: 1.8;
+}
 
 @media (max-width: 480px) {
   .danmaku-item { font-size: 1em; padding: 5px 12px; }
@@ -481,6 +573,7 @@ body {
   </button>
 </div>
 
+<!-- 投稿弹窗 -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-title">
@@ -489,13 +582,14 @@ body {
     </div>
     <label for="inputKaomoji">你的颜文字</label>
     <input type="text" id="inputKaomoji" placeholder="(｡･ω･｡)" maxlength="100" autocomplete="off">
-    <div class="modal-hint">100字符以内～</div>
+    <div class="modal-hint">100字符以内～ 重复的会被拒收哦</div>
     <label for="inputAuthor">你的名字（选填）</label>
     <div class="author-row">
       <input type="text" id="inputAuthor" placeholder="不填就匿名啦～" maxlength="20" autocomplete="off">
       <button type="button" class="btn-clear-name" id="btnClearName" title="清除保存的名字">✕</button>
     </div>
     <div class="modal-hint">会记住你的名字哦～点✕清除</div>
+    <div class="modal-error" id="modalError"></div>
     <div class="modal-actions">
       <button class="btn-cancel" id="btnCancel">算了</button>
       <button class="btn-confirm" id="btnConfirm">发射！</button>
@@ -503,22 +597,33 @@ body {
   </div>
 </div>
 
+<!-- 列表抽屉 -->
 <div class="list-overlay" id="listOverlay">
   <div class="list-panel">
     <div class="list-panel-header">
-      <div class="list-panel-title">全部颜文字 · 📋复制 / 🗑删除</div>
+      <div class="list-panel-title" id="listPanelTitle">全部颜文字 · 📋复制 / 🗑删除</div>
       <button class="btn-close-list" id="btnCloseList">✕</button>
+    </div>
+    <div class="list-tabs">
+      <button class="list-tab active" data-tab="all">全部</button>
+      <button class="list-tab" data-tab="mine">我的投稿</button>
     </div>
     <div class="list-panel-content" id="listContent"></div>
   </div>
 </div>
 
+<!-- 删除确认 -->
 <div class="delete-overlay" id="deleteOverlay">
   <div class="delete-modal">
-    <div class="delete-modal-title">确定要删除这个颜文字吗？</div>
+    <div class="delete-modal-title" id="deleteModalTitle">确定要删除这个颜文字吗？</div>
     <div class="delete-modal-preview" id="deletePreview"></div>
-    <label for="deletePassword">管理密码</label>
-    <input type="password" id="deletePassword" placeholder="输入管理密码" autocomplete="off">
+    <div id="deleteOwnerNote" class="delete-modal-owner-note" style="display:none;">
+      这是你自己投的颜文字～ 不用密码直接删！ (ᐢ..ᐢ)
+    </div>
+    <div id="deletePasswordWrap">
+      <label for="deletePassword">管理密码</label>
+      <input type="password" id="deletePassword" placeholder="输入管理密码" autocomplete="off">
+    </div>
     <div class="delete-error" id="deleteError"></div>
     <div class="delete-modal-actions">
       <button class="btn-delete-cancel" id="btnDeleteCancel">算了</button>
@@ -542,53 +647,84 @@ body {
   const btnClearName = document.getElementById('btnClearName');
   const btnCancel = document.getElementById('btnCancel');
   const btnConfirm = document.getElementById('btnConfirm');
+  const modalError = document.getElementById('modalError');
   const listOverlay = document.getElementById('listOverlay');
   const listContent = document.getElementById('listContent');
+  const listPanelTitle = document.getElementById('listPanelTitle');
   const btnCloseList = document.getElementById('btnCloseList');
+  const listTabs = document.querySelectorAll('.list-tab');
   const deleteOverlay = document.getElementById('deleteOverlay');
+  const deleteModalTitle = document.getElementById('deleteModalTitle');
   const deletePreview = document.getElementById('deletePreview');
   const deletePassword = document.getElementById('deletePassword');
   const deleteError = document.getElementById('deleteError');
+  const deleteOwnerNote = document.getElementById('deleteOwnerNote');
+  const deletePasswordWrap = document.getElementById('deletePasswordWrap');
   const btnDeleteCancel = document.getElementById('btnDeleteCancel');
   const btnDeleteConfirm = document.getElementById('btnDeleteConfirm');
 
   const STORAGE_KEY_NAME = 'kaomoji_wall_author';
+  const STORAGE_KEY_TOKENS = 'kaomoji_wall_my_tokens';
+
+  // ============== 本地token管理（自己投稿的凭证） ==============
+  function getMyTokens() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY_TOKENS) || '{}'); }
+    catch { return {}; }
+  }
+  function saveMyToken(id, token) {
+    const m = getMyTokens();
+    m[id] = token;
+    localStorage.setItem(STORAGE_KEY_TOKENS, JSON.stringify(m));
+  }
+  function removeMyToken(id) {
+    const m = getMyTokens();
+    delete m[id];
+    localStorage.setItem(STORAGE_KEY_TOKENS, JSON.stringify(m));
+  }
+  function isMine(id) {
+    return !!getMyTokens()[id];
+  }
 
   // ============== 弹幕引擎配置 ==============
   const CONFIG = {
-    MAX_ACTIVE: 12,        // 同屏最多弹幕数
-    SPAWN_INTERVAL: 1200,  // 生成间隔（毫秒）
-    MIN_SPEED: 60,         // 最慢速度 (px/s)
-    MAX_SPEED: 140,        // 最快速度 (px/s)
-    ITEM_HEIGHT: 46,       // 每条弹幕占用的行高
-    LANE_GAP: 8,           // 行间距
-    STAGE_PADDING: 12,     // 舞台上下内边距
-    LANE_COOLDOWN: 600,    // 同一轨道最小间隔（毫秒）
+    MAX_ACTIVE: 12,
+    SPAWN_INTERVAL: 1200,
+    MIN_SPEED: 60,
+    MAX_SPEED: 140,
+    ITEM_HEIGHT: 46,
+    LANE_GAP: 8,
+    STAGE_PADDING: 12,
+    LANE_COOLDOWN: 600,
   };
 
-  // ============== 弹幕引擎状态 ==============
   let allKaomoji = [];
-  let activeDanmaku = [];  // 当前正在飘的弹幕列表
+  let activeDanmaku = [];
   let isPaused = false;
   let rafId = null;
   let lastFrameTime = 0;
   let lastSpawnTime = 0;
-  let laneCooldown = [];   // 每个轨道的下一次可用时间戳
-  let deleteTargetId = null;
+  let laneCooldown = [];
+  let deleteTargetItem = null;
+  let currentTab = 'all';
 
-  // ============== 加载数据 ==============
   async function loadData() {
     try {
       const res = await fetch('/api/kaomoji');
       allKaomoji = await res.json();
-      footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
+      updateCount();
       startEngine();
     } catch (e) {
       footerCount.textContent = '加载失败了… (╥﹏╥)';
     }
   }
 
-  // ============== 获取可用轨道 ==============
+  function updateCount() {
+    const myCount = allKaomoji.filter(k => isMine(k.id)).length;
+    let txt = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
+    if (myCount > 0) txt += '  (我的 ' + myCount + ')';
+    footerCount.textContent = txt;
+  }
+
   function getLaneCount() {
     const stageH = stage.offsetHeight;
     return Math.max(1, Math.floor((stageH - CONFIG.STAGE_PADDING * 2) / (CONFIG.ITEM_HEIGHT + CONFIG.LANE_GAP)));
@@ -596,11 +732,8 @@ body {
 
   function pickLane(now) {
     const laneCount = getLaneCount();
-    // 初始化轨道冷却数组
     while (laneCooldown.length < laneCount) laneCooldown.push(0);
     if (laneCooldown.length > laneCount) laneCooldown.length = laneCount;
-
-    // 找出所有可用的轨道
     const available = [];
     for (let i = 0; i < laneCount; i++) {
       if (laneCooldown[i] <= now) available.push(i);
@@ -609,22 +742,25 @@ body {
     return available[Math.floor(Math.random() * available.length)];
   }
 
-  // ============== 生成弹幕 ==============
   function spawnDanmaku(item, now) {
     if (activeDanmaku.length >= CONFIG.MAX_ACTIVE) return false;
 
     const lane = pickLane(now);
     if (lane === -1) return false;
 
+    const mine = isMine(item.id);
+
     const el = document.createElement('div');
-    el.className = 'danmaku-item';
+    el.className = 'danmaku-item' + (mine ? ' mine' : '');
     let html = escapeHtml(item.content);
     if (item.author) {
       html += '<span class="danmaku-author">— ' + escapeHtml(item.author) + '</span>';
     }
+    if (mine) {
+      html += '<span class="mine-tag">我的</span>';
+    }
     el.innerHTML = html;
 
-    // 随机字号做层次
     const scale = 0.95 + Math.random() * 0.25;
     el.style.fontSize = scale + 'em';
 
@@ -632,46 +768,38 @@ body {
     el.style.top = top + 'px';
 
     const stageW = stage.offsetWidth;
-    // 起始位置：紧贴舞台右边外
     el.style.transform = 'translate3d(' + stageW + 'px, 0, 0)';
 
     stage.appendChild(el);
 
-    // 等浏览器测量出元素宽度
     const width = el.offsetWidth;
     const speed = CONFIG.MIN_SPEED + Math.random() * (CONFIG.MAX_SPEED - CONFIG.MIN_SPEED);
 
     const danmaku = {
       el: el,
-      x: stageW,           // 当前 X 位置（左上角）
+      x: stageW,
       width: width,
       lane: lane,
-      speed: speed,        // px/s
+      speed: speed,
       item: item,
-      pressed: false,      // 是否被按下（播放点击反馈中）
+      pressed: false,
     };
 
     activeDanmaku.push(danmaku);
 
-    // 估算这条弹幕完全进入舞台所需时间，用来做轨道冷却
-    // 元素宽度 / 速度 = 完全进场的秒数，再加一点缓冲
     const entryMs = (width / speed) * 1000 + 200;
     laneCooldown[lane] = now + Math.max(CONFIG.LANE_COOLDOWN, entryMs);
 
-    // 绑定点击
     bindDanmakuClick(danmaku);
 
     return true;
   }
 
-  // ============== 点击绑定 ==============
   function bindDanmakuClick(danmaku) {
     const el = danmaku.el;
     const onPress = function(e) {
       if (danmaku.pressed) return;
       danmaku.pressed = true;
-      // 不能 preventDefault 整个事件，否则某些移动端滚动会出问题
-      // 只在需要时调用
       if (e.cancelable) e.preventDefault();
       e.stopPropagation();
 
@@ -684,47 +812,38 @@ body {
       }, 350);
     };
 
-    // pointerdown 优先（统一处理触摸+鼠标+笔）
     if (window.PointerEvent) {
       el.addEventListener('pointerdown', onPress);
     } else {
-      // 老浏览器兜底
       el.addEventListener('touchstart', onPress, { passive: false });
       el.addEventListener('mousedown', onPress);
     }
   }
 
-  // ============== 主循环 ==============
   function tick(timestamp) {
     if (!lastFrameTime) lastFrameTime = timestamp;
-    const dt = Math.min(timestamp - lastFrameTime, 100); // 最大100ms，防止切后台回来一口气跳太多
+    const dt = Math.min(timestamp - lastFrameTime, 100);
     lastFrameTime = timestamp;
 
     if (!isPaused) {
-      // 1. 更新每条弹幕的位置
       for (let i = activeDanmaku.length - 1; i >= 0; i--) {
         const d = activeDanmaku[i];
         if (!d.pressed) {
-          // 按下时弹幕停住，松开继续
           d.x -= d.speed * (dt / 1000);
         }
-        // 应用位置
         d.el.style.transform = 'translate3d(' + d.x + 'px, 0, 0)';
 
-        // 2. 检测是否飘出左边界
         if (d.x + d.width < -20) {
           d.el.remove();
           activeDanmaku.splice(i, 1);
         }
       }
 
-      // 3. 按节奏生成新弹幕
       if (timestamp - lastSpawnTime > CONFIG.SPAWN_INTERVAL && allKaomoji.length > 0) {
         const item = allKaomoji[Math.floor(Math.random() * allKaomoji.length)];
         if (spawnDanmaku(item, timestamp)) {
           lastSpawnTime = timestamp;
         } else {
-          // 生成失败（满员或轨道忙），稍后再试
           lastSpawnTime = timestamp - CONFIG.SPAWN_INTERVAL + 300;
         }
       }
@@ -733,7 +852,6 @@ body {
     rafId = requestAnimationFrame(tick);
   }
 
-  // ============== 引擎控制 ==============
   function startEngine() {
     if (rafId !== null) return;
     lastFrameTime = 0;
@@ -754,7 +872,6 @@ body {
     laneCooldown = [];
   }
 
-  // 页面切后台：暂停循环；切回来：清空重启
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
       stopEngine();
@@ -764,7 +881,6 @@ body {
     }
   });
 
-  // 窗口尺寸变化：清空重新开始（轨道数可能变了）
   let resizeTimer = null;
   window.addEventListener('resize', function() {
     if (resizeTimer) clearTimeout(resizeTimer);
@@ -773,7 +889,6 @@ body {
     }, 200);
   });
 
-  // ============== 暂停按钮 ==============
   btnPause.addEventListener('click', function() {
     isPaused = !isPaused;
     btnPause.textContent = isPaused ? '▶' : '⏸';
@@ -782,7 +897,7 @@ body {
   // ============== 复制 ==============
   function copyToClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext !== false) {
-      navigator.clipboard.writeText(text).then(showCopyToast).catch(function() {
+      navigator.clipboard.writeText(text).then(function(){ showCopyToast('已复制！ (ᐢ..ᐢ)✧'); }).catch(function() {
         fallbackCopy(text);
       });
     } else {
@@ -797,23 +912,26 @@ body {
     ta.style.top = '0';
     document.body.appendChild(ta);
     ta.focus(); ta.select();
-    try { document.execCommand('copy'); } catch(e) {}
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch(e) {}
     document.body.removeChild(ta);
-    showCopyToast();
+    showCopyToast(ok ? '已复制！ (ᐢ..ᐢ)✧' : '复制失败 orz');
   }
   let copyToastTimer = null;
-  function showCopyToast() {
+  function showCopyToast(msg) {
+    copyToast.textContent = msg || '已复制！ (ᐢ..ᐢ)✧';
     copyToast.classList.add('show');
     if (copyToastTimer) clearTimeout(copyToastTimer);
     copyToastTimer = setTimeout(function() {
       copyToast.classList.remove('show');
-    }, 1200);
+    }, 1500);
   }
 
   // ============== 投稿 ==============
   btnSubmit.addEventListener('click', function() {
     modalOverlay.classList.add('active');
     inputKaomoji.value = '';
+    modalError.textContent = '';
     const savedName = localStorage.getItem(STORAGE_KEY_NAME) || '';
     inputAuthor.value = savedName;
     setTimeout(function() { inputKaomoji.focus(); }, 300);
@@ -836,44 +954,57 @@ body {
   inputAuthor.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') submitKaomoji();
   });
+  inputKaomoji.addEventListener('input', function(){ modalError.textContent = ''; });
 
   async function submitKaomoji() {
     const content = inputKaomoji.value.trim();
-    if (!content) { inputKaomoji.focus(); return; }
+    if (!content) {
+      modalError.textContent = '写点啥嘛～';
+      inputKaomoji.focus();
+      return;
+    }
     const authorName = inputAuthor.value.trim();
     btnConfirm.disabled = true;
     btnConfirm.textContent = '发射中...';
+    modalError.textContent = '';
     try {
       const res = await fetch('/api/kaomoji', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content: content, author: authorName })
       });
+      const data = await res.json();
       if (!res.ok) {
-        const err = await res.json();
-        alert(err.error || '发射失败了 (╥﹏╥)');
+        modalError.textContent = data.error || '发射失败了 (╥﹏╥)';
         return;
       }
-      const newItem = await res.json();
+      // 保存自己的token
+      if (data.delete_token) saveMyToken(data.id, data.delete_token);
+      const newItem = {
+        id: data.id,
+        content: data.content,
+        author: data.author,
+        created_at: data.created_at
+      };
       allKaomoji.unshift(newItem);
-      footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
+      updateCount();
       if (authorName) {
         localStorage.setItem(STORAGE_KEY_NAME, authorName);
       }
       modalOverlay.classList.remove('active');
-      // 新投稿的颜文字立刻派出去飘一条
+      // 刚投的立刻派出去
       setTimeout(function() {
         spawnDanmaku(newItem, performance.now());
       }, 100);
     } catch (e) {
-      alert('网络出错了 (╥﹏╥)');
+      modalError.textContent = '网络出错了 (╥﹏╥)';
     } finally {
       btnConfirm.disabled = false;
       btnConfirm.textContent = '发射！';
     }
   }
 
-  // ============== 列表视图 ==============
+  // ============== 列表 ==============
   btnListView.addEventListener('click', function() {
     renderList();
     listOverlay.classList.add('active');
@@ -884,23 +1015,49 @@ body {
   listOverlay.addEventListener('click', function(e) {
     if (e.target === listOverlay) listOverlay.classList.remove('active');
   });
+
+  listTabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      listTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentTab = tab.dataset.tab;
+      renderList();
+    });
+  });
+
   function renderList() {
     listContent.innerHTML = '';
-    if (allKaomoji.length === 0) {
-      listContent.innerHTML = '<div style="text-align:center;padding:40px 20px;color:#D05D1A;opacity:0.5;">还没有颜文字哦～</div>';
-      return;
+    let list = allKaomoji;
+    if (currentTab === 'mine') {
+      list = allKaomoji.filter(k => isMine(k.id));
+      listPanelTitle.textContent = '我的投稿 · 可直接删除';
+      if (list.length === 0) {
+        listContent.innerHTML = '<div class="empty-tip">你还没投过颜文字～<br>去底部"投个颜文字！"试试吧 (ᐢ..ᐢ)</div>';
+        return;
+      }
+    } else {
+      listPanelTitle.textContent = '全部颜文字 · 📋复制 / 🗑删除';
+      if (list.length === 0) {
+        listContent.innerHTML = '<div class="empty-tip">还没有颜文字哦～</div>';
+        return;
+      }
     }
-    allKaomoji.forEach(function(item) {
+    list.forEach(function(item) {
+      const mine = isMine(item.id);
       const el = document.createElement('div');
-      el.className = 'list-item';
+      el.className = 'list-item' + (mine ? ' mine' : '');
+      const mineTag = mine ? '<span class="mine-tag">我的</span>' : '';
+      const delBtn = mine
+        ? '<button class="btn-del-mini" title="删除我的">🗑</button>'
+        : '<button class="btn-lock-mini" title="管理员删除">🔒</button>';
       el.innerHTML =
         '<div class="list-item-left">' +
-          '<div class="list-item-content">' + escapeHtml(item.content) + '</div>' +
+          '<div class="list-item-content"><span class="content-text">' + escapeHtml(item.content) + '</span>' + mineTag + '</div>' +
           (item.author ? '<div class="list-item-author">— ' + escapeHtml(item.author) + '</div>' : '') +
         '</div>' +
         '<div class="list-item-actions">' +
           '<button class="btn-copy-mini" title="复制">📋</button>' +
-          '<button class="btn-del-mini" title="删除">🗑</button>' +
+          delBtn +
         '</div>';
       el.querySelector('.list-item-left').addEventListener('click', function() {
         copyToClipboard(item.content);
@@ -909,59 +1066,91 @@ body {
         e.stopPropagation();
         copyToClipboard(item.content);
       });
-      el.querySelector('.btn-del-mini').addEventListener('click', function(e) {
-        e.stopPropagation();
-        openDeleteModal(item);
-      });
+      const delEl = el.querySelector('.btn-del-mini') || el.querySelector('.btn-lock-mini');
+      if (delEl) {
+        delEl.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openDeleteModal(item);
+        });
+      }
       listContent.appendChild(el);
     });
   }
 
   // ============== 删除 ==============
   function openDeleteModal(item) {
-    deleteTargetId = item.id;
+    deleteTargetItem = item;
     deletePreview.textContent = item.content;
     deletePassword.value = '';
     deleteError.textContent = '';
+
+    if (isMine(item.id)) {
+      // 自己的，不要密码
+      deleteModalTitle.textContent = '删除你投稿的颜文字？';
+      deleteOwnerNote.style.display = 'block';
+      deletePasswordWrap.style.display = 'none';
+    } else {
+      // 别人的，要管理员密码
+      deleteModalTitle.textContent = '确定要删除这个颜文字吗？';
+      deleteOwnerNote.style.display = 'none';
+      deletePasswordWrap.style.display = 'block';
+    }
+
     deleteOverlay.classList.add('active');
-    setTimeout(function() { deletePassword.focus(); }, 300);
+    setTimeout(function() {
+      if (!isMine(item.id)) deletePassword.focus();
+    }, 300);
   }
   btnDeleteCancel.addEventListener('click', function() {
     deleteOverlay.classList.remove('active');
-    deleteTargetId = null;
+    deleteTargetItem = null;
   });
   deleteOverlay.addEventListener('click', function(e) {
     if (e.target === deleteOverlay) {
       deleteOverlay.classList.remove('active');
-      deleteTargetId = null;
+      deleteTargetItem = null;
     }
   });
   deletePassword.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') doDelete();
   });
   btnDeleteConfirm.addEventListener('click', doDelete);
+
   async function doDelete() {
-    if (!deleteTargetId) return;
-    const pw = deletePassword.value;
-    if (!pw) { deleteError.textContent = '请输入管理密码～'; return; }
+    if (!deleteTargetItem) return;
+    const id = deleteTargetItem.id;
+    const mine = isMine(id);
+
+    let body;
+    if (mine) {
+      const token = getMyTokens()[id];
+      if (!token) { deleteError.textContent = '找不到凭证了…'; return; }
+      body = { token: token };
+    } else {
+      const pw = deletePassword.value;
+      if (!pw) { deleteError.textContent = '请输入管理密码～'; return; }
+      body = { password: pw };
+    }
+
     btnDeleteConfirm.disabled = true;
     btnDeleteConfirm.textContent = '删除中...';
     deleteError.textContent = '';
     try {
-      const res = await fetch('/api/kaomoji/' + deleteTargetId, {
+      const res = await fetch('/api/kaomoji/' + id, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: pw })
+        body: JSON.stringify(body)
       });
+      const data = await res.json();
       if (!res.ok) {
-        const err = await res.json();
-        deleteError.textContent = err.error || '删除失败了';
+        deleteError.textContent = data.error || '删除失败了';
         return;
       }
-      allKaomoji = allKaomoji.filter(function(k) { return k.id !== deleteTargetId; });
-      footerCount.textContent = '已收集 ' + allKaomoji.length + ' 个颜文字 ✦';
+      allKaomoji = allKaomoji.filter(function(k) { return k.id !== id; });
+      if (mine) removeMyToken(id);
+      updateCount();
       deleteOverlay.classList.remove('active');
-      deleteTargetId = null;
+      deleteTargetItem = null;
       renderList();
     } catch (e) {
       deleteError.textContent = '网络出错了…';
@@ -971,7 +1160,6 @@ body {
     }
   }
 
-  // ============== 工具 ==============
   function escapeHtml(s) {
     const d = document.createElement('div');
     d.textContent = s;
