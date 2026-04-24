@@ -2,13 +2,20 @@ const express = require('express');
 const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = 3000;
 
+// ====== 管理密码 ======
 const ADMIN_PASSWORD = 'kairin';
 
-const db = new Database(path.join(__dirname, 'kaomoji.db'));
+// ★ 数据库放在仓库外！！ 以后随便删仓库都不会丢数据 ★
+const DATA_DIR = path.join(require('os').homedir(), 'kaomoji-data');
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+const DB_PATH = path.join(DATA_DIR, 'kaomoji.db');
+
+const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
 
 db.exec(`
@@ -16,10 +23,15 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT NOT NULL,
     author TEXT DEFAULT '',
+    delete_token TEXT DEFAULT '',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `);
 
+// 老数据迁移：给旧表加字段（如果不存在的话）
+try { db.exec(`ALTER TABLE kaomoji ADD COLUMN delete_token TEXT DEFAULT ''`); } catch (e) {}
+
+// 种子数据（仅在表空时插入）
 const count = db.prepare('SELECT COUNT(*) as c FROM kaomoji').get().c;
 if (count === 0) {
   const seeds = [
@@ -46,25 +58,21 @@ if (count === 0) {
   ];
   const insert = db.prepare('INSERT INTO kaomoji (content, author) VALUES (?, ?)');
   const insertMany = db.transaction((items) => {
-    for (const [content, author] of items) {
-      insert.run(content, author);
-    }
+    for (const [content, author] of items) insert.run(content, author);
   });
   insertMany(seeds);
 }
 
 app.use(express.json());
 
-//★禁止一切缓存 ★
+// 禁缓存中间件
 const noCache = (req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
-  res.setHeader('Surrogate-Control', 'no-store');
   next();
 };
 
-// 首页动态读取，注入版本号彻底杜绝手机缓存
 app.get('/', noCache, (req, res) => {
   const htmlPath = path.join(__dirname, 'public', 'index.html');
   let html = fs.readFileSync(htmlPath, 'utf-8');
@@ -77,11 +85,13 @@ app.get('/', noCache, (req, res) => {
 app.use(noCache);
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 获取所有颜文字（不返回delete_token，避免泄漏）
 app.get('/api/kaomoji', (req, res) => {
-  const rows = db.prepare('SELECT * FROM kaomoji ORDER BY created_at DESC').all();
+  const rows = db.prepare('SELECT id, content, author, created_at FROM kaomoji ORDER BY created_at DESC').all();
   res.json(rows);
 });
 
+// 投稿新颜文字
 app.post('/api/kaomoji', (req, res) => {
   const { content, author } = req.body;
   if (!content || !content.trim()) {
@@ -91,29 +101,37 @@ app.post('/api/kaomoji', (req, res) => {
   if (trimmed.length > 100) {
     return res.status(400).json({ error: '太长啦！100个字符以内就好～' });
   }
+  // ★ 去重检查 ★
+  const existing = db.prepare('SELECT id FROM kaomoji WHERE content = ?').get(trimmed);
+  if (existing) {
+    return res.status(409).json({ error: '这个颜文字已经有啦～(ᐢ..ᐢ) 换一个吧！', duplicate_id: existing.id });
+  }
   const authorName = (author && author.trim()) ? author.trim().slice(0, 20) : '';
-  const result = db.prepare('INSERT INTO kaomoji (content, author) VALUES (?, ?)').run(trimmed, authorName);
-  const newRow = db.prepare('SELECT * FROM kaomoji WHERE id = ?').get(result.lastInsertRowid);
-  res.json(newRow);
+  const token = crypto.randomBytes(16).toString('hex');
+  const result = db.prepare('INSERT INTO kaomoji (content, author, delete_token) VALUES (?, ?, ?)').run(trimmed, authorName, token);
+  const newRow = db.prepare('SELECT id, content, author, created_at FROM kaomoji WHERE id = ?').get(result.lastInsertRowid);
+  // 只在这一次响应里返回token，前端需要localStorage保存
+  res.json({ ...newRow, delete_token: token });
 });
 
+// 删除颜文字（token 或 管理员密码 二选一）
 app.delete('/api/kaomoji/:id', (req, res) => {
-  const { password } = req.body;
-  if (password !== ADMIN_PASSWORD) {
-    return res.status(403).json({ error: '密码不对哦～' });
-  }
+  const { password, token } = req.body || {};
   const id = parseInt(req.params.id);
-  if (isNaN(id)) {
-    return res.status(400).json({ error: '无效ID' });
-  }
+  if (isNaN(id)) return res.status(400).json({ error: '无效ID' });
   const existing = db.prepare('SELECT * FROM kaomoji WHERE id = ?').get(id);
-  if (!existing) {
-    return res.status(404).json({ error: '找不到这个颜文字' });
+  if (!existing) return res.status(404).json({ error: '找不到这个颜文字' });
+
+  const isAdmin = password && password === ADMIN_PASSWORD;
+  const isOwner = token && existing.delete_token && token === existing.delete_token;
+  if (!isAdmin && !isOwner) {
+    return res.status(403).json({ error: '不能删这条哦～' });
   }
   db.prepare('DELETE FROM kaomoji WHERE id = ?').run(id);
   res.json({ success: true });
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log('\nkaomoji wall running on port ' + PORT + '\n');
+  console.log('\nkaomoji wall running on port ' + PORT);
+  console.log('DB path: ' + DB_PATH + '\n');
 });
