@@ -1,11 +1,12 @@
+js
 const express = require('express');
 const Database = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = 3000;
 
-// ====== 管理密码（老大可以改这里！）======
 const ADMIN_PASSWORD = 'kairin';
 
 const db = new Database(path.join(__dirname, 'kaomoji.db'));
@@ -55,20 +56,28 @@ if (count === 0) {
 
 app.use(express.json());
 
-// ★★★ 关键修复：禁用静态文件缓存 ★★★
-app.use(express.static(path.join(__dirname, 'public'), {
-  setHeaders: (res) => {
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-  }
-}));
-
-// API 也禁缓存
-app.use('/api', (req, res, next) => {
-  res.setHeader('Cache-Control', 'no-store');
+// ★ 禁止一切缓存 ★
+const noCache = (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('Surrogate-Control', 'no-store');
   next();
+};
+
+// 首页用动态读取 + 注入版本号，彻底杜绝手机缓存
+app.get('/', noCache, (req, res) => {
+  const htmlPath = path.join(__dirname, 'public', 'index.html');
+  let html = fs.readFileSync(htmlPath, 'utf-8');
+  // 在<head>里塞一个版本meta，文件改一次就变一次
+  const version = fs.statSync(htmlPath).mtimeMs;
+  html = html.replace('<head>', `<head>\n<meta name="version" content="${version}">`);
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(html);
 });
+
+app.use(noCache);
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/kaomoji', (req, res) => {
   const rows = db.prepare('SELECT * FROM kaomoji ORDER BY created_at DESC').all();
